@@ -41,7 +41,7 @@ The created high resolution UTC products of 472 Brazilian cities are freely acce
 
 ## Acknowledgement
 
-Our ideas may partly come from the paper:
+Our ideas may partly come from the papers:
 
 [Surrounding greenness is associated with lower risk and burden of low birth weight in Iran](https://www.nature.com/articles/s41467-023-43425-6#:~:text=By%20involving%20~4%20million%20Iranian,risks%20of%20LBW%20and%20TLBW)
 
