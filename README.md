@@ -1,7 +1,6 @@
 
 
 # The Effect of Trees on Urbanites’ Daily Sentimental Expressions
-### Jianhua Guo, Anna Kruspe, and Xiao Xiang Zhu
 
 
 ## The Urban Tree Canopy Cover in Brazil
