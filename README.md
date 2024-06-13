@@ -2,10 +2,10 @@
 
 # The Effect of Trees on Urbanites’ Daily Sentimental Expressions
 
-# Jianhua Guo, Anna Kruspe, and Xiao Xiang Zhu
+### Jianhua Guo, Anna Kruspe, and Xiao Xiang Zhu
 
 
-# The Urban Tree Canopy Cover in Brazil
+## The Urban Tree Canopy Cover in Brazil
 The created high resolution UTC products of 472 Brazilian cities are freely accessible at \url{https://nkszjx.github.io/projects/UTB.html}.
 ![](/figure/TreeSeg_Network.png)
 
