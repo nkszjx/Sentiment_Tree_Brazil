@@ -46,9 +46,9 @@ library(sandwich)
 ## Acknowledgement
 
 Our ideas may partly come from the paper:
-[Surrounding greenness is associated with lower risk and burden of low birth weight in Iran]([https://github.com/speedinghzl/Pytorch-Deeplab](https://www.nature.com/articles/s41467-023-43425-6#:~:text=By%20involving%20~4%20million%20Iranian,risks%20of%20LBW%20and%20TLBW])
+[Surrounding greenness is associated with lower risk and burden of low birth weight in Iran]([https://www.nature.com/articles/s41467-023-43425-6#:~:text=By%20involving%20~4%20million%20Iranian,risks%20of%20LBW%20and%20TLBW])
 
-[Air pollution lowers Chinese urbanites’ expressed happiness on social media]([https://github.com/hfslyc/AdvSemiSeg](https://www.nature.com/articles/s41562-018-0521-2))
+[Air pollution lowers Chinese urbanites’ expressed happiness on social media]([https://www.nature.com/articles/s41562-018-0521-2])
 
 [Temperature impacts on hate speech online: evidence from 4 billion geolocated tweets from the USA]([https://www.thelancet.com/journals/lanplh/article/PIIS2542-5196(22)00173-5/fulltext])
 
