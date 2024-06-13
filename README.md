@@ -54,21 +54,16 @@ Our ideas may partly come from the paper:
 [Temperature impacts on hate speech online: evidence from 4 billion geolocated tweets from the USA](https://www.thelancet.com/journals/lanplh/article/PIIS2542-5196(22)00173-5/fulltext)
 
 [Urbanites’ mental health undermined by air pollution](https://www.nature.com/articles/s41893-022-01032-1)
+
+
+
+This work was supported in part by part by the German Federal Ministry of Education and Research (BMBF) in the framework of the international future AI Laboratory "AI4EO-Artificial Intelligence for Earth Observation: Reasoning, Uncertainties, Ethics and Beyond" under Grant 01DD20001, in part by the German Federal Ministry of Economics and Technology in the framework of the "National Center of excellence ML4Earth" under Grant 50EE2201C, and in part by the Excellence Strategy of the Federal Government and the Länder through the TUM Innovation Network EarthCare and by Munich Center for Machine Learning.
+
+
 ## Citation
 
 ```
-@article{GUO20231,
-title = {Nationwide urban tree canopy mapping and coverage assessment in Brazil from high-resolution remote sensing images using deep learning},
-journal = {ISPRS Journal of Photogrammetry and Remote Sensing},
-volume = {198},
-pages = {1-15},
-year = {2023},
-issn = {0924-2716},
-doi = {https://doi.org/10.1016/j.isprsjprs.2023.02.007},
-url = {https://www.sciencedirect.com/science/article/pii/S0924271623000461},
-author = {Jianhua Guo, Qingsong Xu, Yue Zeng, Zhiheng Liu, and Xiao Xiang Zhu},
-}
-```
+
 ```
 
 
