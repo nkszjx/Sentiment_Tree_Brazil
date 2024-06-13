@@ -36,7 +36,7 @@ library(lfe)
 library(sandwich)
 ```
 ## The Urban Tree Canopy Cover in Brazil
-The created high resolution UTC products of 472 Brazilian cities are freely accessible at \url{https://nkszjx.github.io/projects/UTB.html}.
+The created high resolution UTC products of 472 Brazilian cities are freely accessible at \url{https://github.com/nkszjx/UTB_master}.
 ![](/figure/TreeSeg_Network.png)
 
 
