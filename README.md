@@ -16,7 +16,7 @@ The created high resolution UTC products of 472 Brazilian cities are freely acce
 ![](/figure/Graphical.png)
 
 ## Package pre-requisites
-The codes running environment are required. 
+The R codes running environment are required. 
 
 ```
 library(DescTools)
