@@ -1,11 +1,5 @@
 
-
 # The Effect of Trees on Urbanites’ Daily Sentimental Expressions
-
-
-## The Urban Tree Canopy Cover in Brazil
-The created high resolution UTC products of 472 Brazilian cities are freely accessible at \url{https://nkszjx.github.io/projects/UTB.html}.
-![](/figure/TreeSeg_Network.png)
 
 
 ## Results
@@ -41,6 +35,10 @@ library(car)
 library(lfe)
 library(sandwich)
 ```
+## The Urban Tree Canopy Cover in Brazil
+The created high resolution UTC products of 472 Brazilian cities are freely accessible at \url{https://nkszjx.github.io/projects/UTB.html}.
+![](/figure/TreeSeg_Network.png)
+
 
 ## Acknowledgement
 
@@ -57,6 +55,7 @@ Our ideas may partly come from the paper:
 
 
 This work was supported in part by part by the German Federal Ministry of Education and Research (BMBF) in the framework of the international future AI Laboratory "AI4EO-Artificial Intelligence for Earth Observation: Reasoning, Uncertainties, Ethics and Beyond" under Grant 01DD20001, in part by the German Federal Ministry of Economics and Technology in the framework of the "National Center of excellence ML4Earth" under Grant 50EE2201C, and in part by the Excellence Strategy of the Federal Government and the Länder through the TUM Innovation Network EarthCare and by Munich Center for Machine Learning.
+
 
 
 ## Citation
