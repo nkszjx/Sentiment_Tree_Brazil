@@ -9,11 +9,10 @@ The created high resolution UTC products of 472 Brazilian cities are freely acce
 
 
 ## Results
-### Tree-sentiment relationship
+### Tree-Sentiment associations
 ![](/figure.png)
 
-### Urban tree canopy cover in Brazil
-![](/figure/Graphical.png)
+![](/fix.png)
 
 ## Package pre-requisites
 The R codes running environment are required. 
