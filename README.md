@@ -5,14 +5,7 @@
 ## Results
 ### Tree-Sentiment associations
 ![](/figure.png)
-### Figure 1. 
-The geographical location and tree coverage of study cities, and the relationship between tree coverage
-and sentimental values. a, The spatial distribution of study cities in Brazil as well as their corresponding tree
-coverage and Gini coefficients (indicates spatial distribution fairness, the smaller the value, the fairer it is, and vice
-versa). b, The relationship between tree coverage and sentimental values. c, The sentiment distribution curves for different cases
-of tree coverage. The more people with positive emotions, the smaller the cumulative proportion of people with low
-emotional values, and vice versa. Here, the original geolocated Twitter data in f and g was collected from São Paulo,
-Brazil on October 16, 2019.
+#### Figure 1. The geographical location and tree coverage of study cities, and the relationship between tree coverage and sentimental values. a, The spatial distribution of study cities in Brazil as well as their corresponding tree coverage and Gini coefficients (indicates spatial distribution fairness, the smaller the value, the fairer it is, and vice versa). b, The relationship between tree coverage and sentimental values. c, The sentiment distribution curves for different cases of tree coverage. The more people with positive emotions, the smaller the cumulative proportion of people with low emotional values, and vice versa. Here, the original geolocated Twitter data in f and g was collected from São Paulo, Brazil on October 16, 2019.
 
 ![](/fix.png)
 
