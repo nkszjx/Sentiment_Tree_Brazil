@@ -9,7 +9,7 @@ The created high resolution UTC products of 472 Brazilian cities are freely acce
 
 
 ## Results
-### Tree segmentation results
+### Tree-sentiment relationship
 ![](/figure.png)
 
 ### Urban tree canopy cover in Brazil
