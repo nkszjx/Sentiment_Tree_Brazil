@@ -1,5 +1,5 @@
 
-#rm(list=ls())  # 这行代码是清空当前工作环境中的所有对象，确保你开始一个干净的工作空间
+rm(list=ls())  # 这行代码是清空当前工作环境中的所有对象，确保你开始一个干净的工作空间
 
 library(DescTools)
 library(foreign)
@@ -23,14 +23,15 @@ library(car)
 
 library(lfe)
 library(sandwich)
-############################### 读取2018年数据############################################
+
+############################## 读取2018年数据############################################
 ## 数据路径
 
 str_year='2018'
 
 str0='D:/Sentiment_Brazil/brazil_twitter_points_2018-2022_sentiment/year'
 file_str0=paste(str0, str_year, '/', sep="")
-file_str=paste(str0, str_year, '/DataDrivingFiles/', sep="")
+file_str=paste(str0, str_year, '/DataDrivingFiles2/', sep="")
 
 ##情感数据名称
 
@@ -95,7 +96,7 @@ CityName=paste('brazil_twitter_points_', str_year,'_CityName', sep='')
 StateName=paste('brazil_twitter_points_', str_year,'_StateName', sep='')
 
 userid=paste('brazil_twitter_points_', str_year,'_userid', sep='')
-useridtotalnumber=paste('brazil_twitter_points_', str_year,'_2018and2022_useridtotalnumber', sep='')
+useridtotalnumber=paste('brazil_twitter_points_', str_year,'_useridtotalnumber_all1819', sep='')
 
 
 Precipitation=paste('brazil_twitter_points_', str_year,'_Precipitation', sep='')
@@ -103,8 +104,8 @@ humidity=paste('brazil_twitter_points_', str_year,'_Relativehumidity_2m', sep=''
 Wind=paste('brazil_twitter_points_', str_year,'_Windspeed_10m', sep='')
 Surface_pressure=paste('brazil_twitter_points_', str_year,'_Surface_pressure', sep='')
 cloudcover=paste('brazil_twitter_points_', str_year,'_cloudcover', sep='')
-MeanTemperature=paste('brazil_twitter_points_', str_year,'_Temperature_2m', sep='')
-
+MeanTemperature=paste('brazil_twitter_points_', str_year,'_Temperature_new20240614', sep='')
+#MeanTemperature=paste('brazil_twitter_points_', str_year,'_Skin_temperature_new20240614', sep='')
 
 
 nightlight=paste('brazil_twitter_points_', str_year,'_nightlight', sep='')
@@ -123,7 +124,9 @@ yearmonthcity=paste('brazil_twitter_points_', str_year,'_yearmonthcity', sep='')
 yearmonthday=paste('brazil_twitter_points_', str_year,'_yearmonthday', sep='')
 diffhours=paste('brazil_twitter_points_', str_year,'_diffhours', sep='')
 
-
+lcz=paste('brazil_twitter_points_', str_year,'_lcz', sep='')
+lcz = loadcsv2(file_str, lcz)
+names(lcz)[1] <- "lcz"
 
 
 ## 读取数据集
@@ -160,6 +163,7 @@ names(cloudcover)[1] <- "cloudcover"
 
 MeanTemperature = loadcsv2(file_str, MeanTemperature)
 MeanTemperature$V1[is.na(MeanTemperature$V1)]<-mean(MeanTemperature$V1,na.rm=TRUE) # 缺少数据变为均值
+MeanTemperature<- MeanTemperature -273.15
 names(MeanTemperature)[1] <- "MeanTemperature"
 
 
@@ -205,28 +209,27 @@ names(yearmonth)[1] <- "yearmonth"
 names(yearmonthday)[1] <- "yearmonthday"
 names(diffhours)[1] <- "diffhours"
 
-
 # 各个变量按列合并
 query_sample2018 <- cbind( sentiment, 
                            yearmonth,yearmonthday,
                            City_area, CityScale,GDP, Geography,
                            UTC500, UTC500_2,UTC1000, UTC1000_2, UTC1500, UTC1500_2, 
-                           Lat,Lon, diffhours,
+                           Lat,Lon, diffhours, lcz,
                            Precipitation, humidity, Wind, Surface_pressure,cloudcover,MeanTemperature,
                            nightlight,population, settlement, impervious, unimpervious, 
                            CityName, StateName, userid, useridtotalnumber)
 
 rm(sentiment, 
    yearmonth,yearmonthday,
-   City_area, CityScale, GDP, Geography,
+   City_area, CityScale,GDP, Geography,
    UTC500, UTC500_2,UTC1000, UTC1000_2, UTC1500, UTC1500_2, 
-   Lat,Lon, diffhours,
+   Lat,Lon, diffhours,lcz,
    Precipitation, humidity, Wind, Surface_pressure,cloudcover,MeanTemperature,
    nightlight,population, settlement, impervious, unimpervious, 
    CityName, StateName, userid, useridtotalnumber)
 
-		   
-		
+
+
 
 
 ############################## 读取2019年数据############################################
@@ -236,7 +239,7 @@ str_year='2019'
 
 str0='D:/Sentiment_Brazil/brazil_twitter_points_2018-2022_sentiment/year'
 file_str0=paste(str0, str_year, '/', sep="")
-file_str=paste(str0, str_year, '/DataDrivingFiles/', sep="")
+file_str=paste(str0, str_year, '/DataDrivingFiles2/', sep="")
 
 ##情感数据名称
 
@@ -301,7 +304,7 @@ CityName=paste('brazil_twitter_points_', str_year,'_CityName', sep='')
 StateName=paste('brazil_twitter_points_', str_year,'_StateName', sep='')
 
 userid=paste('brazil_twitter_points_', str_year,'_userid', sep='')
-useridtotalnumber=paste('brazil_twitter_points_', str_year,'_2018and2022_useridtotalnumber', sep='')
+useridtotalnumber=paste('brazil_twitter_points_', str_year,'_useridtotalnumber_all1819', sep='')
 
 
 Precipitation=paste('brazil_twitter_points_', str_year,'_Precipitation', sep='')
@@ -309,8 +312,8 @@ humidity=paste('brazil_twitter_points_', str_year,'_Relativehumidity_2m', sep=''
 Wind=paste('brazil_twitter_points_', str_year,'_Windspeed_10m', sep='')
 Surface_pressure=paste('brazil_twitter_points_', str_year,'_Surface_pressure', sep='')
 cloudcover=paste('brazil_twitter_points_', str_year,'_cloudcover', sep='')
-MeanTemperature=paste('brazil_twitter_points_', str_year,'_Temperature_2m', sep='')
-
+MeanTemperature=paste('brazil_twitter_points_', str_year,'_Temperature_new20240614', sep='')
+#MeanTemperature=paste('brazil_twitter_points_', str_year,'_Skin_temperature_new20240614', sep='')
 
 
 nightlight=paste('brazil_twitter_points_', str_year,'_nightlight', sep='')
@@ -329,8 +332,9 @@ yearmonthcity=paste('brazil_twitter_points_', str_year,'_yearmonthcity', sep='')
 yearmonthday=paste('brazil_twitter_points_', str_year,'_yearmonthday', sep='')
 diffhours=paste('brazil_twitter_points_', str_year,'_diffhours', sep='')
 
-
-
+lcz=paste('brazil_twitter_points_', str_year,'_lcz', sep='')
+lcz = loadcsv2(file_str, lcz)
+names(lcz)[1] <- "lcz"
 
 ## 读取数据集
 CityName = loadcsv2(file_str, CityName)
@@ -366,6 +370,7 @@ names(cloudcover)[1] <- "cloudcover"
 
 MeanTemperature = loadcsv2(file_str, MeanTemperature)
 MeanTemperature$V1[is.na(MeanTemperature$V1)]<-mean(MeanTemperature$V1,na.rm=TRUE) # 缺少数据变为均值
+MeanTemperature<- MeanTemperature -273.15
 names(MeanTemperature)[1] <- "MeanTemperature"
 
 
@@ -417,8 +422,8 @@ query_sample2019 <- cbind( sentiment,
                            yearmonth,yearmonthday,
                            City_area, CityScale,GDP, Geography,
                            UTC500, UTC500_2,UTC1000, UTC1000_2, UTC1500, UTC1500_2, 
-                           Lat,Lon, diffhours,
-                           Precipitation, humidity, Wind, Surface_pressure,cloudcover, MeanTemperature,
+                           Lat,Lon, diffhours,lcz,
+                           Precipitation, humidity, Wind, Surface_pressure,cloudcover,MeanTemperature,
                            nightlight,population, settlement, impervious, unimpervious, 
                            CityName, StateName, userid, useridtotalnumber)
 
@@ -426,1634 +431,100 @@ rm(sentiment,
    yearmonth,yearmonthday,
    City_area, CityScale,GDP, Geography,
    UTC500, UTC500_2,UTC1000, UTC1000_2, UTC1500, UTC1500_2, 
-   Lat,Lon, diffhours,
+   Lat,Lon, diffhours,lcz,
    Precipitation, humidity, Wind, Surface_pressure,cloudcover,MeanTemperature,
    nightlight,population, settlement, impervious, unimpervious, 
    CityName, StateName, userid, useridtotalnumber)
+
 
 ################################合并2018年和2019年数据####################################
 
 
 query_sample <- rbind(query_sample2018, query_sample2019)
 
+###########################################################################################
+#rm(query_sample2018, query_sample2019) #清空变量
+## 样列分析：
+# 选择满足特定条件的数据的所有行进行分析
+#subset_data <- data[data$y %in% c("A", "C"), ]
+# 选择满足特定条件的数据的所有行进行分析
+#subset_data <- query_sample[query_sample$keyword %in% c("X", "Y"), ]
+# 选取夏天时间的数据进行实验
+#query_sample <- query_sample0[query_sample0$yearmonth %in% c("Y2018M01", "Y2018M02", "Y2018M03","Y2018M04","Y2018M05", "Y2018M10","Y2018M11", "Y2018M12",
+#"Y2019M01", "Y2019M02", "Y2019M03","Y2019M04","Y2019M05", "Y2019M10","Y2019M11", "Y2019M12"), ] # yearmonth summer
+## 去除RS,SC 2个州的冬天数据
+#query_sample <- subset(query_sample0, !(StateName %in% c("RS", "SC") & yearmonth %in% c("Y2018M06", "Y2018M07","Y2018M08","Y2019M06", "Y2019M07","Y2019M08") ) )
+#rm(subset_data)
 
 
-rm(query_sample2018, query_sample2019) #清空变量
 
+###################################### 去除异常值####################################
+query_sample2<-subset(query_sample, !(sentiment < 0.15 & UTC500>0.30) )
 
-
-## 去除异常值，比如 sentiment<0.4, 但是UTC>0.2; sentiment >0.85 & UTC500<0.05
-query_sample2<-subset(query_sample, !(sentiment < 0.3 & UTC500>0.2) )
-query_sample2<-subset(query_sample2, !(sentiment >0.9 & UTC500<0.05))
-
+query_sample4<- query_sample2
 query_sample2 = subset(query_sample2, (useridtotalnumber>100) ) # 过滤tweet文本过少的数据
+query_sample2 <- na.omit(query_sample2) # 删除缺少项
 
 
-mean_Surface_pressure<-mean(query_sample2$Surface_pressure)
-sd_Surface_pressure<-sd(query_sample2$Surface_pressure)
-
-mean_nightlight<-mean(query_sample2$nightlight)
-sd_nightlight<-sd(query_sample2$nightlight)
-mean_population<-mean(query_sample2$population)
-sd_population<-sd(query_sample2$population)
-mean_settlement<-mean(query_sample2$settlement)
-sd_settlement<-sd(query_sample2$settlement)
-
-
+rm(query_sample)
+rm(Lat_sentiment_TUC)
 #summary(query_sample2)
+
+#################################### 去取变量均值与标准差####################################
 sd_utc5<-sd(query_sample2$UTC500)
 sd_utc10<-sd(query_sample2$UTC1000)
 sd_utc15<-sd(query_sample2$UTC1500)
 sd_sent<-sd(query_sample2$sentiment)
+mean_utc5<-mean(query_sample2$UTC500)
+mean_utc10<-mean(query_sample2$UTC1000)
+mean_utc15<-mean(query_sample2$UTC1500)
+mean_sent<-mean(query_sample2$sentiment)
+
+#Precipitation, humidity, Wind, Surface_pressure,cloudcover,MeanTemperature,
+
+mean_Precipitation<- mean(query_sample2$Precipitation)
+sd_Precipitation<- sd(query_sample2$Precipitation)
+
+mean_humidity<- mean(query_sample2$humidity)
+sd_humidity<- sd(query_sample2$humidity)
+
+mean_Wind<-mean(query_sample2$Wind)
+sd_Wind<-sd(query_sample2$Wind)
+
+mean_cloudcover<-mean(query_sample2$cloudcover)
+sd_cloudcover<-sd(query_sample2$cloudcover)
+
+mean_MeanTemperature<-mean(query_sample2$MeanTemperature)
+sd_MeanTemperature<-sd(query_sample2$MeanTemperature)
+
+mean_Surface_pressure<-mean(query_sample2$Surface_pressure)
+sd_Surface_pressure<-sd(query_sample2$Surface_pressure)
+
+
+
+mean_nightlight<-mean(query_sample2$nightlight)
+sd_nightlight<-sd(query_sample2$nightlight)
+
+mean_population<-mean(query_sample2$population)
+sd_population<-sd(query_sample2$population)
+
+mean_settlement<-mean(query_sample2$settlement)
+sd_settlement<-sd(query_sample2$settlement)
+
+
 #query_sample2$unimpervious[query_sample2$unimpervious<0]<- 0 # 小于0则为0
 mean_unimpervious<-mean(query_sample2$unimpervious)
 sd_unimpervious<-sd(query_sample2$unimpervious)
 
-#write.csv(query_sample2$unimpervious,'D:/Sentiment_Brazil/R_codes/Effect202400508/unimpervious.csv')
+write.csv(query_sample2$unimpervious,'D:/Sentiment_Brazil/R_codes/NewCodes/Effect202400508/unimpervious.csv')
 
 
-## 去除异常值，比如 sentiment<0.4, 但是UTC>0.2; sentiment >0.85 & UTC500<0.05
-query_sample4<-subset(query_sample, !(sentiment < 0.3 & UTC500>0.2) )
-query_sample4<-subset(query_sample4, !(sentiment >0.9 & UTC500<0.05))
 
-# 过滤tweet文本过少的数据阈值设为：50, 100, 150, 200, 250, 300,
-rm(query_sample)
+########################################### Heterogeneous analysis ###########################################
 
 
-######################################################################################
 
-######################################Supplementary Table 14 Heterogeneous ######################
-
-model <-felm(sentiment ~ 1+ UTC500+
-               #UTC500:ifelse(Lat>0, 1, 0) + 
-               UTC500:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-               UTC500:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-               UTC500:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-               UTC500:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-               UTC500:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-               UTC500:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-               UTC500:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-               Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-               MeanTemperature+
-               settlement +nightlight +population
-             |yearmonthday+userid+ CityName ,   data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-
-# 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable14_Heterogeneous.txt"
-con <- file(output_file, open = "a")# 打开文件连接，追加模式
-writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
-model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
-writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
-# 关闭文件连接 close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
-df_Lat5_1 <- data.frame(cbind(cfint, coef, `pval`))
-df_Lat5_1$group <- c("A")
-df_Lat5_1$tag <- "1"
-
-
-model <-felm(sentiment ~ 1+ UTC500+
-               UTC500:ifelse(Lat>0, 1, 0) + 
-               #UTC500:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-               UTC500:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-               UTC500:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-               UTC500:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-               UTC500:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-               UTC500:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-               UTC500:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-               Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-               MeanTemperature+
-               settlement +nightlight +population
-             |yearmonthday+userid+ CityName ,   data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
-df_Lat5_2 <- data.frame(cbind(cfint, coef, `pval`))
-df_Lat5_2$group <- c("B")
-df_Lat5_2$tag <- "1"
-
-
-model <-felm(sentiment ~ 1+ UTC500+
-               UTC500:ifelse(Lat>0, 1, 0) + 
-               UTC500:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-               #UTC500:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-               UTC500:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-               UTC500:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-               UTC500:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-               UTC500:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-               UTC500:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-               Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-               MeanTemperature+
-               settlement +nightlight +population
-             |yearmonthday+userid+ CityName ,  data =query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
-df_Lat5_3 <- data.frame(cbind(cfint, coef, pval))
-df_Lat5_3$group <- c("C")
-df_Lat5_3$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC500+
-                UTC500:ifelse(Lat>0, 1, 0) + 
-                UTC500:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-                UTC500:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-                #UTC500:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-                UTC500:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-                UTC500:ifelse(Lat> -25 & Lat<= -20, 1, 0) +
-                UTC500:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 				
-                UTC500:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
-df_Lat5_4 <- data.frame(cbind(cfint, coef, pval))
-df_Lat5_4$group <- c("D")
-df_Lat5_4$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC500+
-                UTC500:ifelse(Lat>0, 1, 0) + 
-                UTC500:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-                UTC500:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-                UTC500:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-                #UTC500:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-                UTC500:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-                UTC500:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-                UTC500:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
-df_Lat5_5 <- data.frame(cbind(cfint, coef, pval))
-df_Lat5_5$group <- c("E")
-df_Lat5_5$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC500+
-                UTC500:ifelse(Lat>0, 1, 0) + 
-                UTC500:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-                UTC500:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-                UTC500:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-                UTC500:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-                #UTC500:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-                UTC500:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-                UTC500:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2 )
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
-df_Lat5_6 <- data.frame(cbind(cfint, coef, pval))
-df_Lat5_6$group <- c("F")
-df_Lat5_6$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC500+
-                UTC500:ifelse(Lat>0, 1, 0) + 
-                UTC500:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-                UTC500:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-                UTC500:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-                UTC500:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-                UTC500:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-                #UTC500:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-                UTC500:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
-df_Lat5_7 <- data.frame(cbind(cfint, coef, pval))
-df_Lat5_7$group <- c("G")
-df_Lat5_7$tag <- "1"
-
-
-model <- felm(sentiment ~ 1+ UTC500+
-                UTC500:ifelse(Lat>0, 1, 0) + 
-                UTC500:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-                UTC500:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-                UTC500:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-                UTC500:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-                UTC500:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-                UTC500:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-                #UTC500:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
-df_Lat5_8 <- data.frame(cbind(cfint, coef, pval))
-df_Lat5_8$group <- c("H")
-df_Lat5_8$tag <- "1"
-
-############添加另一属性值############
-df_Lat5_1$character <- "10°N°~0°"
-df_Lat5_2$character <- "0°~5°S"
-df_Lat5_3$character <- "5°S~10°S"
-df_Lat5_4$character <- "10°S~15°S"
-df_Lat5_5$character <- "15°S~20°S"
-df_Lat5_6$character <- "20°S~25°S"
-df_Lat5_7$character <- "25°S~30°S"
-df_Lat5_8$character <- "30°S~35°S"
-
-#年龄画图区域
-df_combine_lat <- rbind(
-  df_Lat5_1, df_Lat5_2, df_Lat5_3, df_Lat5_4, df_Lat5_5, df_Lat5_6, df_Lat5_7, df_Lat5_8)
-## 保存数据###
-
-write.csv(df_combine_lat,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC500_heterogeneity20240606/UTC500_combine_lat.csv')
-
-
-######################################Supplementary Table 15 Heterogeneous ################################################
-
-model <-felm(sentiment ~ 1+ UTC1000+
-               #UTC1000:ifelse(Lat>0, 1, 0) + 
-               UTC1000:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-               UTC1000:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-               UTC1000:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-               UTC1000:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-               UTC1000:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-               UTC1000:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-               UTC1000:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-               Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-               MeanTemperature+
-               settlement +nightlight +population
-             |yearmonthday+userid+ CityName ,   data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-
-# 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable15_Heterogeneous.txt"
-con <- file(output_file, open = "a")# 打开文件连接，追加模式
-writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
-model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
-writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
-# 关闭文件连接 close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1000"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
-df_Lat5_1 <- data.frame(cbind(cfint, coef, `pval`))
-df_Lat5_1$group <- c("A")
-df_Lat5_1$tag <- "1"
-
-
-model <-felm(sentiment ~ 1+ UTC1000+
-               UTC1000:ifelse(Lat>0, 1, 0) + 
-               #UTC1000:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-               UTC1000:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-               UTC1000:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-               UTC1000:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-               UTC1000:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-               UTC1000:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-               UTC1000:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-               Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-               MeanTemperature+
-               settlement +nightlight +population
-             |yearmonthday+userid+ CityName ,   data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1000"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
-df_Lat5_2 <- data.frame(cbind(cfint, coef, `pval`))
-df_Lat5_2$group <- c("B")
-df_Lat5_2$tag <- "1"
-
-
-model <-felm(sentiment ~ 1+ UTC1000+
-               UTC1000:ifelse(Lat>0, 1, 0) + 
-               UTC1000:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-               #UTC1000:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-               UTC1000:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-               UTC1000:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-               UTC1000:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-               UTC1000:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-               UTC1000:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-               Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-               MeanTemperature+
-               settlement +nightlight +population
-             |yearmonthday+userid+ CityName ,  data =query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1000"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
-df_Lat5_3 <- data.frame(cbind(cfint, coef, pval))
-df_Lat5_3$group <- c("C")
-df_Lat5_3$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC1000+
-                UTC1000:ifelse(Lat>0, 1, 0) + 
-                UTC1000:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-                UTC1000:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-                #UTC1000:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-                UTC1000:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-                UTC1000:ifelse(Lat> -25 & Lat<= -20, 1, 0) +
-                UTC1000:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 				
-                UTC1000:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1000"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
-df_Lat5_4 <- data.frame(cbind(cfint, coef, pval))
-df_Lat5_4$group <- c("D")
-df_Lat5_4$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC1000+
-                UTC1000:ifelse(Lat>0, 1, 0) + 
-                UTC1000:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-                UTC1000:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-                UTC1000:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-                #UTC1000:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-                UTC1000:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-                UTC1000:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-                UTC1000:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1000"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
-df_Lat5_5 <- data.frame(cbind(cfint, coef, pval))
-df_Lat5_5$group <- c("E")
-df_Lat5_5$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC1000+
-                UTC1000:ifelse(Lat>0, 1, 0) + 
-                UTC1000:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-                UTC1000:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-                UTC1000:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-                UTC1000:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-                #UTC1000:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-                UTC1000:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-                UTC1000:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2 )
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1000"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
-df_Lat5_6 <- data.frame(cbind(cfint, coef, pval))
-df_Lat5_6$group <- c("F")
-df_Lat5_6$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC1000+
-                UTC1000:ifelse(Lat>0, 1, 0) + 
-                UTC1000:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-                UTC1000:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-                UTC1000:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-                UTC1000:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-                UTC1000:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-                #UTC1000:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-                UTC1000:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1000"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
-df_Lat5_7 <- data.frame(cbind(cfint, coef, pval))
-df_Lat5_7$group <- c("G")
-df_Lat5_7$tag <- "1"
-
-
-model <- felm(sentiment ~ 1+ UTC1000+
-                UTC1000:ifelse(Lat>0, 1, 0) + 
-                UTC1000:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-                UTC1000:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-                UTC1000:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-                UTC1000:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-                UTC1000:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-                UTC1000:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-                #UTC1000:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-close(con)
-
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1000"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
-df_Lat5_8 <- data.frame(cbind(cfint, coef, pval))
-df_Lat5_8$group <- c("H")
-df_Lat5_8$tag <- "1"
-
-############添加另一属性值############
-df_Lat5_1$character <- "10°N°~0°"
-df_Lat5_2$character <- "0°~5°S"
-df_Lat5_3$character <- "5°S~10°S"
-df_Lat5_4$character <- "10°S~15°S"
-df_Lat5_5$character <- "15°S~20°S"
-df_Lat5_6$character <- "20°S~25°S"
-df_Lat5_7$character <- "25°S~30°S"
-df_Lat5_8$character <- "30°S~35°S"
-
-#年龄画图区域
-df_combine_lat <- rbind(
-  df_Lat5_1, df_Lat5_2, df_Lat5_3, df_Lat5_4, df_Lat5_5, df_Lat5_6, df_Lat5_7, df_Lat5_8)
-## 保存数据###
-
-write.csv(df_combine_lat,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC1000_heterogeneity20240606/UTC1000_combine_lat.csv')
-
-
-######################################Supplementary Table 16 Heterogeneous ################################################
-
-model <-felm(sentiment ~ 1+ UTC1500+
-               #UTC1500:ifelse(Lat>0, 1, 0) + 
-               UTC1500:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-               UTC1500:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-               UTC1500:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-               UTC1500:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-               UTC1500:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-               UTC1500:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-               UTC1500:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-               Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-               MeanTemperature+
-               settlement +nightlight +population
-             |yearmonthday+userid+ CityName ,   data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-
-# 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable16_Heterogeneous.txt"
-con <- file(output_file, open = "a")# 打开文件连接，追加模式
-writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
-model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
-writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
-# 关闭文件连接 close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
-df_Lat5_1 <- data.frame(cbind(cfint, coef, `pval`))
-df_Lat5_1$group <- c("A")
-df_Lat5_1$tag <- "1"
-
-
-model <-felm(sentiment ~ 1+ UTC1500+
-               UTC1500:ifelse(Lat>0, 1, 0) + 
-               #UTC1500:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-               UTC1500:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-               UTC1500:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-               UTC1500:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-               UTC1500:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-               UTC1500:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-               UTC1500:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-               Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-               MeanTemperature+
-               settlement +nightlight +population
-             |yearmonthday+userid+ CityName ,   data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
-df_Lat5_2 <- data.frame(cbind(cfint, coef, `pval`))
-df_Lat5_2$group <- c("B")
-df_Lat5_2$tag <- "1"
-
-
-model <-felm(sentiment ~ 1+ UTC1500+
-               UTC1500:ifelse(Lat>0, 1, 0) + 
-               UTC1500:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-               #UTC1500:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-               UTC1500:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-               UTC1500:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-               UTC1500:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-               UTC1500:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-               UTC1500:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-               Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-               MeanTemperature+
-               settlement +nightlight +population
-             |yearmonthday+userid+ CityName ,  data =query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
-df_Lat5_3 <- data.frame(cbind(cfint, coef, pval))
-df_Lat5_3$group <- c("C")
-df_Lat5_3$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC1500+
-                UTC1500:ifelse(Lat>0, 1, 0) + 
-                UTC1500:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-                UTC1500:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-                #UTC1500:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-                UTC1500:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-                UTC1500:ifelse(Lat> -25 & Lat<= -20, 1, 0) +
-                UTC1500:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 				
-                UTC1500:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
-df_Lat5_4 <- data.frame(cbind(cfint, coef, pval))
-df_Lat5_4$group <- c("D")
-df_Lat5_4$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC1500+
-                UTC1500:ifelse(Lat>0, 1, 0) + 
-                UTC1500:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-                UTC1500:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-                UTC1500:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-                #UTC1500:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-                UTC1500:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-                UTC1500:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-                UTC1500:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
-df_Lat5_5 <- data.frame(cbind(cfint, coef, pval))
-df_Lat5_5$group <- c("E")
-df_Lat5_5$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC1500+
-                UTC1500:ifelse(Lat>0, 1, 0) + 
-                UTC1500:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-                UTC1500:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-                UTC1500:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-                UTC1500:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-                #UTC1500:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-                UTC1500:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-                UTC1500:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2 )
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
-df_Lat5_6 <- data.frame(cbind(cfint, coef, pval))
-df_Lat5_6$group <- c("F")
-df_Lat5_6$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC1500+
-                UTC1500:ifelse(Lat>0, 1, 0) + 
-                UTC1500:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-                UTC1500:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-                UTC1500:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-                UTC1500:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-                UTC1500:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-                #UTC1500:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-                UTC1500:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
-df_Lat5_7 <- data.frame(cbind(cfint, coef, pval))
-df_Lat5_7$group <- c("G")
-df_Lat5_7$tag <- "1"
-
-
-model <- felm(sentiment ~ 1+ UTC1500+
-                UTC1500:ifelse(Lat>0, 1, 0) + 
-                UTC1500:ifelse(Lat> -5 & Lat<= 0, 1, 0) + 
-                UTC1500:ifelse(Lat> -10 & Lat<= -5, 1, 0) + 
-                UTC1500:ifelse(Lat> -15 & Lat<= -10, 1, 0) + 
-                UTC1500:ifelse(Lat> -20 & Lat<= -15, 1, 0) + 
-                UTC1500:ifelse(Lat> -25 & Lat<= -20, 1, 0) + 
-                UTC1500:ifelse(Lat> -30 & Lat<= -25, 1, 0) + 
-                #UTC1500:ifelse(Lat> -35 & Lat<= -30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-close(con)
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
-df_Lat5_8 <- data.frame(cbind(cfint, coef, pval))
-df_Lat5_8$group <- c("H")
-df_Lat5_8$tag <- "1"
-
-############添加另一属性值############
-df_Lat5_1$character <- "10°N°~0°"
-df_Lat5_2$character <- "0°~5°S"
-df_Lat5_3$character <- "5°S~10°S"
-df_Lat5_4$character <- "10°S~15°S"
-df_Lat5_5$character <- "15°S~20°S"
-df_Lat5_6$character <- "20°S~25°S"
-df_Lat5_7$character <- "25°S~30°S"
-df_Lat5_8$character <- "30°S~35°S"
-
-#年龄画图区域
-df_combine_lat <- rbind(
-  df_Lat5_1, df_Lat5_2, df_Lat5_3, df_Lat5_4, df_Lat5_5, df_Lat5_6, df_Lat5_7, df_Lat5_8)
-## 保存数据###
-
-write.csv(df_combine_lat,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC1500_heterogeneity20240606/UTC1500_combine_lat.csv')
-
-
-
-
-
-###################################### SupplementaryTable17_Heterogeneous Lon ################################################
-
-model <-felm(sentiment ~ 1+ UTC500+
-               #UTC500:ifelse(Lon<= -65, 1, 0) + 
-               UTC500:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-               UTC500:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-               UTC500:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-               UTC500:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-               UTC500:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-               UTC500:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-               UTC500:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-               Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-               MeanTemperature+
-               settlement +nightlight +population
-             |yearmonthday+userid+ CityName ,   data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-
-# 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable17_Heterogeneous.txt"
-con <- file(output_file, open = "a")# 打开文件连接，追加模式
-writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
-model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
-writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
-# 关闭文件连接 close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
-df_Lon5_1 <- data.frame(cbind(cfint, coef, `pval`))
-df_Lon5_1$group <- c("A")
-df_Lon5_1$tag <- "1"
-
-
-model <-felm(sentiment ~ 1+ UTC500+
-               UTC500:ifelse(Lon<= -65, 1, 0) + 
-               #UTC500:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-               UTC500:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-               UTC500:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-               UTC500:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-               UTC500:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-               UTC500:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-               UTC500:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-               Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-               MeanTemperature+
-               settlement +nightlight +population
-             |yearmonthday+userid+ CityName ,   data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-#close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
-df_Lon5_2 <- data.frame(cbind(cfint, coef, `pval`))
-df_Lon5_2$group <- c("B")
-df_Lon5_2$tag <- "1"
-
-
-model <-felm(sentiment ~ 1+ UTC500+
-               UTC500:ifelse(Lon<= -65, 1, 0) + 
-               UTC500:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-               #UTC500:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-               UTC500:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-               UTC500:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-               UTC500:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-               UTC500:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-               UTC500:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-               Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-               MeanTemperature+
-               settlement +nightlight +population
-             |yearmonthday+userid+ CityName ,  data =query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-#close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
-df_Lon5_3 <- data.frame(cbind(cfint, coef, pval))
-df_Lon5_3$group <- c("C")
-df_Lon5_3$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC500+
-                UTC500:ifelse(Lon<= -65, 1, 0) + 
-                UTC500:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-                UTC500:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-                #UTC500:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-                UTC500:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-                UTC500:ifelse(Lon> -45& Lon<=-40, 1, 0) +
-                UTC500:ifelse(Lon> -40& Lon<=-35, 1, 0) + 				
-                UTC500:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-#close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
-df_Lon5_4 <- data.frame(cbind(cfint, coef, pval))
-df_Lon5_4$group <- c("D")
-df_Lon5_4$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC500+
-                UTC500:ifelse(Lon<= -65, 1, 0) + 
-                UTC500:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-                UTC500:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-                UTC500:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-                #UTC500:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-                UTC500:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-                UTC500:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-                UTC500:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-#close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
-df_Lon5_5 <- data.frame(cbind(cfint, coef, pval))
-df_Lon5_5$group <- c("E")
-df_Lon5_5$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC500+
-                UTC500:ifelse(Lon<= -65, 1, 0) + 
-                UTC500:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-                UTC500:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-                UTC500:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-                UTC500:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-                #UTC500:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-                UTC500:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-                UTC500:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2 )
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-#close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
-df_Lon5_6 <- data.frame(cbind(cfint, coef, pval))
-df_Lon5_6$group <- c("F")
-df_Lon5_6$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC500+
-                UTC500:ifelse(Lon<= -65, 1, 0) + 
-                UTC500:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-                UTC500:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-                UTC500:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-                UTC500:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-                UTC500:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-                #UTC500:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-                UTC500:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-#close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
-df_Lon5_7 <- data.frame(cbind(cfint, coef, pval))
-df_Lon5_7$group <- c("G")
-df_Lon5_7$tag <- "1"
-
-
-model <- felm(sentiment ~ 1+ UTC500+
-                UTC500:ifelse(Lon<= -65, 1, 0) + 
-                UTC500:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-                UTC500:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-                UTC500:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-                UTC500:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-                UTC500:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-                UTC500:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-                #UTC500:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
-df_Lon5_8 <- data.frame(cbind(cfint, coef, pval))
-df_Lon5_8$group <- c("H")
-df_Lon5_8$tag <- "1"
-
-############添加另一属性值############
-df_Lon5_1$character <- "70°W~ 65°W"
-df_Lon5_2$character <- "65°W~ 60°W"
-df_Lon5_3$character <- "60°W~ 55°W"
-df_Lon5_4$character <- "55°W~ 50°W"
-df_Lon5_5$character <- "50°W~ 45°W"
-df_Lon5_6$character <- "45°W~ 40°W"
-df_Lon5_7$character <- "40°W~ 35°W"
-df_Lon5_8$character <- "35°W~ 30°W"
-
-#年龄画图区域
-df_combine_lon <- rbind(
-  df_Lon5_1, df_Lon5_2, df_Lon5_3, df_Lon5_4, df_Lon5_5, df_Lon5_6,  df_Lon5_7, df_Lon5_8)
-## 保存数据###
-
-write.csv(df_combine_lon,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC500_heterogeneity20240606/UTC500_combine_lon.csv')
-
-
-
-
-
-###################################### SupplementaryTable18_Heterogeneous Lon ################################################
-
-model <-felm(sentiment ~ 1+ UTC1000+
-               #UTC1000:ifelse(Lon<= -65, 1, 0) + 
-               UTC1000:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-               UTC1000:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-               UTC1000:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-               UTC1000:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-               UTC1000:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-               UTC1000:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-               UTC1000:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-               Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-               MeanTemperature+
-               settlement +nightlight +population
-             |yearmonthday+userid+ CityName ,   data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-
-# 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable18_Heterogeneous.txt"
-con <- file(output_file, open = "a")# 打开文件连接，追加模式
-writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
-model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
-writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
-# 关闭文件连接 close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1000"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
-df_Lon5_1 <- data.frame(cbind(cfint, coef, `pval`))
-df_Lon5_1$group <- c("A")
-df_Lon5_1$tag <- "1"
-
-
-model <-felm(sentiment ~ 1+ UTC1000+
-               UTC1000:ifelse(Lon<= -65, 1, 0) + 
-               #UTC1000:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-               UTC1000:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-               UTC1000:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-               UTC1000:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-               UTC1000:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-               UTC1000:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-               UTC1000:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-               Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-               MeanTemperature+
-               settlement +nightlight +population
-             |yearmonthday+userid+ CityName ,   data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-#close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1000"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
-df_Lon5_2 <- data.frame(cbind(cfint, coef, `pval`))
-df_Lon5_2$group <- c("B")
-df_Lon5_2$tag <- "1"
-
-
-model <-felm(sentiment ~ 1+ UTC1000+
-               UTC1000:ifelse(Lon<= -65, 1, 0) + 
-               UTC1000:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-               #UTC1000:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-               UTC1000:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-               UTC1000:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-               UTC1000:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-               UTC1000:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-               UTC1000:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-               Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-               MeanTemperature+
-               settlement +nightlight +population
-             |yearmonthday+userid+ CityName ,  data =query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-#close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1000"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
-df_Lon5_3 <- data.frame(cbind(cfint, coef, pval))
-df_Lon5_3$group <- c("C")
-df_Lon5_3$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC1000+
-                UTC1000:ifelse(Lon<= -65, 1, 0) + 
-                UTC1000:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-                UTC1000:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-                #UTC1000:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-                UTC1000:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-                UTC1000:ifelse(Lon> -45& Lon<=-40, 1, 0) +
-                UTC1000:ifelse(Lon> -40& Lon<=-35, 1, 0) + 				
-                UTC1000:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-#close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1000"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
-df_Lon5_4 <- data.frame(cbind(cfint, coef, pval))
-df_Lon5_4$group <- c("D")
-df_Lon5_4$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC1000+
-                UTC1000:ifelse(Lon<= -65, 1, 0) + 
-                UTC1000:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-                UTC1000:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-                UTC1000:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-                #UTC1000:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-                UTC1000:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-                UTC1000:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-                UTC1000:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-#close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1000"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
-df_Lon5_5 <- data.frame(cbind(cfint, coef, pval))
-df_Lon5_5$group <- c("E")
-df_Lon5_5$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC1000+
-                UTC1000:ifelse(Lon<= -65, 1, 0) + 
-                UTC1000:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-                UTC1000:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-                UTC1000:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-                UTC1000:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-                #UTC1000:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-                UTC1000:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-                UTC1000:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2 )
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-#close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1000"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
-df_Lon5_6 <- data.frame(cbind(cfint, coef, pval))
-df_Lon5_6$group <- c("F")
-df_Lon5_6$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC1000+
-                UTC1000:ifelse(Lon<= -65, 1, 0) + 
-                UTC1000:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-                UTC1000:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-                UTC1000:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-                UTC1000:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-                UTC1000:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-                #UTC1000:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-                UTC1000:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-#close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1000"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
-df_Lon5_7 <- data.frame(cbind(cfint, coef, pval))
-df_Lon5_7$group <- c("G")
-df_Lon5_7$tag <- "1"
-
-
-model <- felm(sentiment ~ 1+ UTC1000+
-                UTC1000:ifelse(Lon<= -65, 1, 0) + 
-                UTC1000:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-                UTC1000:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-                UTC1000:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-                UTC1000:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-                UTC1000:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-                UTC1000:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-                #UTC1000:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1000"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
-df_Lon5_8 <- data.frame(cbind(cfint, coef, pval))
-df_Lon5_8$group <- c("H")
-df_Lon5_8$tag <- "1"
-
-############添加另一属性值############
-df_Lon5_1$character <- "70°W~ 65°W"
-df_Lon5_2$character <- "65°W~ 60°W"
-df_Lon5_3$character <- "60°W~ 55°W"
-df_Lon5_4$character <- "55°W~ 50°W"
-df_Lon5_5$character <- "50°W~ 45°W"
-df_Lon5_6$character <- "45°W~ 40°W"
-df_Lon5_7$character <- "40°W~ 35°W"
-df_Lon5_8$character <- "35°W~ 30°W"
-
-#年龄画图区域
-df_combine_lon <- rbind(
-  df_Lon5_1, df_Lon5_2, df_Lon5_3, df_Lon5_4, df_Lon5_5, df_Lon5_6,  df_Lon5_7, df_Lon5_8)
-## 保存数据###
-
-write.csv(df_combine_lon,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC1000_heterogeneity20240606/UTC1000_combine_lon.csv')
-
-
-
-
-###################################### SupplementaryTable19_Heterogeneous Lon ################################################
-
-model <-felm(sentiment ~ 1+ UTC1500+
-               #UTC1500:ifelse(Lon<= -65, 1, 0) + 
-               UTC1500:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-               UTC1500:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-               UTC1500:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-               UTC1500:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-               UTC1500:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-               UTC1500:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-               UTC1500:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-               Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-               MeanTemperature+
-               settlement +nightlight +population
-             |yearmonthday+userid+ CityName ,   data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-
-# 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable19_Heterogeneous.txt"
-con <- file(output_file, open = "a")# 打开文件连接，追加模式
-writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
-model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
-writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
-# 关闭文件连接 close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
-df_Lon5_1 <- data.frame(cbind(cfint, coef, `pval`))
-df_Lon5_1$group <- c("A")
-df_Lon5_1$tag <- "1"
-
-
-model <-felm(sentiment ~ 1+ UTC1500+
-               UTC1500:ifelse(Lon<= -65, 1, 0) + 
-               #UTC1500:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-               UTC1500:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-               UTC1500:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-               UTC1500:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-               UTC1500:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-               UTC1500:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-               UTC1500:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-               Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-               MeanTemperature+
-               settlement +nightlight +population
-             |yearmonthday+userid+ CityName ,   data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-#close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
-df_Lon5_2 <- data.frame(cbind(cfint, coef, `pval`))
-df_Lon5_2$group <- c("B")
-df_Lon5_2$tag <- "1"
-
-
-model <-felm(sentiment ~ 1+ UTC1500+
-               UTC1500:ifelse(Lon<= -65, 1, 0) + 
-               UTC1500:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-               #UTC1500:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-               UTC1500:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-               UTC1500:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-               UTC1500:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-               UTC1500:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-               UTC1500:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-               Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-               MeanTemperature+
-               settlement +nightlight +population
-             |yearmonthday+userid+ CityName ,  data =query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-#close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
-df_Lon5_3 <- data.frame(cbind(cfint, coef, pval))
-df_Lon5_3$group <- c("C")
-df_Lon5_3$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC1500+
-                UTC1500:ifelse(Lon<= -65, 1, 0) + 
-                UTC1500:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-                UTC1500:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-                #UTC1500:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-                UTC1500:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-                UTC1500:ifelse(Lon> -45& Lon<=-40, 1, 0) +
-                UTC1500:ifelse(Lon> -40& Lon<=-35, 1, 0) + 				
-                UTC1500:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-#close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
-df_Lon5_4 <- data.frame(cbind(cfint, coef, pval))
-df_Lon5_4$group <- c("D")
-df_Lon5_4$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC1500+
-                UTC1500:ifelse(Lon<= -65, 1, 0) + 
-                UTC1500:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-                UTC1500:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-                UTC1500:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-                #UTC1500:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-                UTC1500:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-                UTC1500:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-                UTC1500:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-#close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
-df_Lon5_5 <- data.frame(cbind(cfint, coef, pval))
-df_Lon5_5$group <- c("E")
-df_Lon5_5$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC1500+
-                UTC1500:ifelse(Lon<= -65, 1, 0) + 
-                UTC1500:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-                UTC1500:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-                UTC1500:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-                UTC1500:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-                #UTC1500:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-                UTC1500:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-                UTC1500:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2 )
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-#close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
-df_Lon5_6 <- data.frame(cbind(cfint, coef, pval))
-df_Lon5_6$group <- c("F")
-df_Lon5_6$tag <- "1"
-
-model <- felm(sentiment ~ 1+ UTC1500+
-                UTC1500:ifelse(Lon<= -65, 1, 0) + 
-                UTC1500:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-                UTC1500:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-                UTC1500:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-                UTC1500:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-                UTC1500:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-                #UTC1500:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-                UTC1500:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-#close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
-df_Lon5_7 <- data.frame(cbind(cfint, coef, pval))
-df_Lon5_7$group <- c("G")
-df_Lon5_7$tag <- "1"
-
-
-model <- felm(sentiment ~ 1+ UTC1500+
-                UTC1500:ifelse(Lon<= -65, 1, 0) + 
-                UTC1500:ifelse(Lon> -65 & Lon<=-60, 1, 0) + 
-                UTC1500:ifelse(Lon> -60 & Lon<=-55, 1, 0) + 
-                UTC1500:ifelse(Lon> -55 & Lon<=-50, 1, 0) + 
-                UTC1500:ifelse(Lon> -50 & Lon<=-45, 1, 0) + 
-                UTC1500:ifelse(Lon> -45& Lon<=-40, 1, 0) + 
-                UTC1500:ifelse(Lon> -40& Lon<=-35, 1, 0) + 
-                #UTC1500:ifelse(Lon> -35& Lon<=-30, 1, 0) + 
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName ,  data = query_sample2)
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-close(con)
-
-coef <- model$coefficients[1:1,]
-cfint <- confint(model, c("UTC1500"),level=0.95)
-colnames(cfint) <- c("min","max")
-pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
-df_Lon5_8 <- data.frame(cbind(cfint, coef, pval))
-df_Lon5_8$group <- c("H")
-df_Lon5_8$tag <- "1"
-
-############添加另一属性值############
-df_Lon5_1$character <- "70°W~ 65°W"
-df_Lon5_2$character <- "65°W~ 60°W"
-df_Lon5_3$character <- "60°W~ 55°W"
-df_Lon5_4$character <- "55°W~ 50°W"
-df_Lon5_5$character <- "50°W~ 45°W"
-df_Lon5_6$character <- "45°W~ 40°W"
-df_Lon5_7$character <- "40°W~ 35°W"
-df_Lon5_8$character <- "35°W~ 30°W"
-
-#年龄画图区域
-df_combine_lon <- rbind(
-  df_Lon5_1, df_Lon5_2, df_Lon5_3, df_Lon5_4, df_Lon5_5, df_Lon5_6,  df_Lon5_7, df_Lon5_8)
-## 保存数据###
-
-write.csv(df_combine_lon,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC1500_heterogeneity20240606/UTC1500_combine_lon.csv')
-
-
-
-
-
-###################################### Supplementary Table 20 Heterogeneous Geography ################################################
+###################################### Supplementary Table 14 Heterogeneous Geography ################################################
 
 model <-felm(sentiment ~ 1+ UTC500+
                #UTC500:ifelse(Geography == "NorthBrazil", 1, 0) + 
@@ -2068,7 +539,7 @@ model <-felm(sentiment ~ 1+ UTC500+
 # 查看模型摘要
 print(summary(model))
 # 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable20_Heterogeneous.txt"
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable14_Heterogeneous.txt"
 con <- file(output_file, open = "a")# 打开文件连接，追加模式
 writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
 model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
@@ -2207,7 +678,7 @@ write.csv(df_combine_Geography,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC500_hete
 
 
 
-###################################### Supplementary Table 21 Heterogeneous Geography ################################################
+###################################### Supplementary Table 15 Heterogeneous Geography ################################################
 
 model <-felm(sentiment ~ 1+ UTC1000+
                #UTC1000:ifelse(Geography == "NorthBrazil", 1, 0) + 
@@ -2222,7 +693,7 @@ model <-felm(sentiment ~ 1+ UTC1000+
 # 查看模型摘要
 print(summary(model))
 # 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable21_Heterogeneous.txt"
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable15_Heterogeneous.txt"
 con <- file(output_file, open = "a")# 打开文件连接，追加模式
 writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
 model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
@@ -2361,7 +832,7 @@ write.csv(df_combine_Geography,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC1000_het
 
 
 
-###################################### Supplementary Table 22 Heterogeneous Geography ################################################
+###################################### Supplementary Table 16 Heterogeneous Geography ################################################
 
 model <-felm(sentiment ~ 1+ UTC1500+
                #UTC1500:ifelse(Geography == "NorthBrazil", 1, 0) + 
@@ -2376,7 +847,7 @@ model <-felm(sentiment ~ 1+ UTC1500+
 # 查看模型摘要
 print(summary(model))
 # 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable22_Heterogeneous.txt"
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable16_Heterogeneous.txt"
 con <- file(output_file, open = "a")# 打开文件连接，追加模式
 writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
 model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
@@ -2515,7 +986,1134 @@ write.csv(df_combine_Geography,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC1500_het
 
 
 
-###################################### Supplementary Table 23 Heterogeneous Geography GDP ################################################
+
+
+##################################################UTC 500 LCZ Supplementary Table 17 ###################################################################
+model <- felm(sentiment ~ 1+ UTC500+
+                #UTC500:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 指定输出文件的路径和名称
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable17_Heterogeneous_UTC500_lcz.txt"
+con <- file(output_file, open = "a")# 打开文件连接，追加模式
+writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
+model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
+writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
+# 关闭文件连接 close(con)
+
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
+df_lcz5_1 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_1$group <- c("A")
+df_lcz5_1$tag <- "1"
+
+
+model <- felm(sentiment ~ 1+ UTC500+
+                UTC500:ifelse(lcz == "lcz1", 1, 0) + 
+                #UTC500:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
+df_lcz5_2 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_2$group <- c("B")
+df_lcz5_2$tag <- "1"
+
+
+
+model <- felm(sentiment ~ 1+ UTC500+
+                UTC500:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz2", 1, 0) + 
+                #UTC500:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
+df_lcz5_3 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_3$group <- c("C")
+df_lcz5_3$tag <- "1"
+
+
+
+model <- felm(sentiment ~ 1+ UTC500+
+                UTC500:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz3", 1, 0) + 
+                #UTC500:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
+df_lcz5_4 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_4$group <- c("D")
+df_lcz5_4$tag <- "1"
+
+
+
+model <- felm(sentiment ~ 1+ UTC500+
+                UTC500:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz4", 1, 0) + 
+                #UTC500:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
+df_lcz5_5 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_5$group <- c("E")
+df_lcz5_5$tag <- "1"
+
+
+
+model <- felm(sentiment ~ 1+ UTC500+
+                UTC500:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz5", 1, 0) + 
+                #UTC500:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
+df_lcz5_6 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_6$group <- c("F")
+df_lcz5_6$tag <- "1"
+
+
+model <- felm(sentiment ~ 1+ UTC500+
+                UTC500:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz6", 1, 0) + 
+                #UTC500:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
+df_lcz5_7 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_7$group <- c("G")
+df_lcz5_7$tag <- "1"
+
+
+
+model <- felm(sentiment ~ 1+ UTC500+
+                UTC500:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz7", 1, 0) + 
+                #UTC500:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
+df_lcz5_8 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_8$group <- c("H")
+df_lcz5_8$tag <- "1"
+
+
+model <- felm(sentiment ~ 1+ UTC500+
+                UTC500:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz8", 1, 0) + 
+                #UTC500:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
+df_lcz5_9 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_9$group <- c("I")
+df_lcz5_9$tag <- "1"
+
+
+model <- felm(sentiment ~ 1+ UTC500+
+                UTC500:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC500:ifelse(lcz == "lcz9", 1, 0) + 
+                #UTC500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
+df_lcz5_10 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_10$group <- c("J")
+df_lcz5_10$tag <- "1"
+
+
+
+############添加另一属性值############
+df_lcz5_1$character <- "lcz1"
+df_lcz5_2$character <- "lcz2"
+df_lcz5_3$character <- "lcz3"
+df_lcz5_4$character <- "lcz4"
+df_lcz5_5$character <- "lcz5 "
+df_lcz5_6$character <- "lcz6"
+df_lcz5_7$character <- "lcz7"
+df_lcz5_8$character <- "lcz8"
+df_lcz5_9$character <- "lcz9"
+df_lcz5_10$character <- "lcz10"
+
+
+#年龄画图区域
+df_combine_lcz <- rbind(
+  df_lcz5_1,df_lcz5_2,df_lcz5_3,df_lcz5_4,df_lcz5_5,df_lcz5_6, df_lcz5_7, df_lcz5_8, df_lcz5_9, df_lcz5_10)
+
+## 保存数据###
+
+write.csv(df_combine_lcz,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC500_heterogeneity20240606/UTC500_combine_lcz.csv')
+
+
+
+##################################################UTC 1000 LCZ SupplementaryTable18 ###################################################################
+
+
+
+model <- felm(sentiment ~ 1+ UTC1000+
+                #UTC1000:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 指定输出文件的路径和名称
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable18_Heterogeneous_UTC1000_lcz.txt"
+con <- file(output_file, open = "a")# 打开文件连接，追加模式
+writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
+model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
+writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
+# 关闭文件连接 close(con)
+
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1000"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
+df_lcz5_1 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_1$group <- c("A")
+df_lcz5_1$tag <- "1"
+
+
+model <- felm(sentiment ~ 1+ UTC1000+
+                UTC1000:ifelse(lcz == "lcz1", 1, 0) + 
+                #UTC1000:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1000"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
+df_lcz5_2 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_2$group <- c("B")
+df_lcz5_2$tag <- "1"
+
+
+
+model <- felm(sentiment ~ 1+ UTC1000+
+                UTC1000:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz2", 1, 0) + 
+                #UTC1000:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1000"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
+df_lcz5_3 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_3$group <- c("C")
+df_lcz5_3$tag <- "1"
+
+
+
+model <- felm(sentiment ~ 1+ UTC1000+
+                UTC1000:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz3", 1, 0) + 
+                #UTC1000:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1000"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
+df_lcz5_4 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_4$group <- c("D")
+df_lcz5_4$tag <- "1"
+
+
+
+model <- felm(sentiment ~ 1+ UTC1000+
+                UTC1000:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz4", 1, 0) + 
+                #UTC1000:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1000"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
+df_lcz5_5 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_5$group <- c("E")
+df_lcz5_5$tag <- "1"
+
+
+
+model <- felm(sentiment ~ 1+ UTC1000+
+                UTC1000:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz5", 1, 0) + 
+                #UTC1000:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1000"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
+df_lcz5_6 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_6$group <- c("F")
+df_lcz5_6$tag <- "1"
+
+
+model <- felm(sentiment ~ 1+ UTC1000+
+                UTC1000:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz6", 1, 0) + 
+                #UTC1000:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1000"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
+df_lcz5_7 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_7$group <- c("G")
+df_lcz5_7$tag <- "1"
+
+
+
+model <- felm(sentiment ~ 1+ UTC1000+
+                UTC1000:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz7", 1, 0) + 
+                #UTC1000:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1000"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
+df_lcz5_8 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_8$group <- c("H")
+df_lcz5_8$tag <- "1"
+
+
+model <- felm(sentiment ~ 1+ UTC1000+
+                UTC1000:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz8", 1, 0) + 
+                #UTC1000:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1000"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
+df_lcz5_9 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_9$group <- c("I")
+df_lcz5_9$tag <- "1"
+
+
+model <- felm(sentiment ~ 1+ UTC1000+
+                UTC1000:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC1000:ifelse(lcz == "lcz9", 1, 0) + 
+                #UTC1000:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1000"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
+df_lcz5_10 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_10$group <- c("J")
+df_lcz5_10$tag <- "1"
+
+
+
+############添加另一属性值############
+df_lcz5_1$character <- "lcz1"
+df_lcz5_2$character <- "lcz2"
+df_lcz5_3$character <- "lcz3"
+df_lcz5_4$character <- "lcz4"
+df_lcz5_5$character <- "lcz5 "
+df_lcz5_6$character <- "lcz6"
+df_lcz5_7$character <- "lcz7"
+df_lcz5_8$character <- "lcz8"
+df_lcz5_9$character <- "lcz9"
+df_lcz5_10$character <- "lcz10"
+
+
+#年龄画图区域
+df_combine_lcz <- rbind(
+  df_lcz5_1,df_lcz5_2,df_lcz5_3,df_lcz5_4,df_lcz5_5,df_lcz5_6, df_lcz5_7, df_lcz5_8, df_lcz5_9, df_lcz5_10)
+
+## 保存数据###
+
+write.csv(df_combine_lcz,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC1000_heterogeneity20240606/UTC1000_combine_lcz.csv')
+
+
+##################################################UTC 1500 LCZ SupplementaryTable19 ###################################################################
+
+
+
+model <- felm(sentiment ~ 1+ UTC1500+
+                #UTC1500:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 指定输出文件的路径和名称
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable19_Heterogeneous_UTC1500_lcz.txt"
+con <- file(output_file, open = "a")# 打开文件连接，追加模式
+writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
+model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
+writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
+# 关闭文件连接 close(con)
+
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
+df_lcz5_1 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_1$group <- c("A")
+df_lcz5_1$tag <- "1"
+
+
+model <- felm(sentiment ~ 1+ UTC1500+
+                UTC1500:ifelse(lcz == "lcz1", 1, 0) + 
+                #UTC1500:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
+df_lcz5_2 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_2$group <- c("B")
+df_lcz5_2$tag <- "1"
+
+
+
+model <- felm(sentiment ~ 1+ UTC1500+
+                UTC1500:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz2", 1, 0) + 
+                #UTC1500:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
+df_lcz5_3 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_3$group <- c("C")
+df_lcz5_3$tag <- "1"
+
+
+
+model <- felm(sentiment ~ 1+ UTC1500+
+                UTC1500:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz3", 1, 0) + 
+                #UTC1500:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
+df_lcz5_4 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_4$group <- c("D")
+df_lcz5_4$tag <- "1"
+
+
+
+model <- felm(sentiment ~ 1+ UTC1500+
+                UTC1500:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz4", 1, 0) + 
+                #UTC1500:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
+df_lcz5_5 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_5$group <- c("E")
+df_lcz5_5$tag <- "1"
+
+
+
+model <- felm(sentiment ~ 1+ UTC1500+
+                UTC1500:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz5", 1, 0) + 
+                #UTC1500:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
+df_lcz5_6 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_6$group <- c("F")
+df_lcz5_6$tag <- "1"
+
+
+model <- felm(sentiment ~ 1+ UTC1500+
+                UTC1500:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz6", 1, 0) + 
+                #UTC1500:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
+df_lcz5_7 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_7$group <- c("G")
+df_lcz5_7$tag <- "1"
+
+
+
+model <- felm(sentiment ~ 1+ UTC1500+
+                UTC1500:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz7", 1, 0) + 
+                #UTC1500:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
+df_lcz5_8 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_8$group <- c("H")
+df_lcz5_8$tag <- "1"
+
+
+model <- felm(sentiment ~ 1+ UTC1500+
+                UTC1500:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz8", 1, 0) + 
+                #UTC1500:ifelse(lcz == "lcz9", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
+df_lcz5_9 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_9$group <- c("I")
+df_lcz5_9$tag <- "1"
+
+
+model <- felm(sentiment ~ 1+ UTC1500+
+                UTC1500:ifelse(lcz == "lcz1", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz2", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz3", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz4", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz5", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz6", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz7", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz8", 1, 0) + 
+                UTC1500:ifelse(lcz == "lcz9", 1, 0) + 
+                #UTC1500:ifelse(lcz == "lcz10", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
+df_lcz5_10 <- data.frame(cbind(cfint, coef, `pval`))
+df_lcz5_10$group <- c("J")
+df_lcz5_10$tag <- "1"
+
+
+
+############添加另一属性值############
+df_lcz5_1$character <- "lcz1"
+df_lcz5_2$character <- "lcz2"
+df_lcz5_3$character <- "lcz3"
+df_lcz5_4$character <- "lcz4"
+df_lcz5_5$character <- "lcz5 "
+df_lcz5_6$character <- "lcz6"
+df_lcz5_7$character <- "lcz7"
+df_lcz5_8$character <- "lcz8"
+df_lcz5_9$character <- "lcz9"
+df_lcz5_10$character <- "lcz10"
+
+
+#年龄画图区域
+df_combine_lcz <- rbind(
+  df_lcz5_1,df_lcz5_2,df_lcz5_3,df_lcz5_4,df_lcz5_5,df_lcz5_6, df_lcz5_7, df_lcz5_8, df_lcz5_9, df_lcz5_10)
+
+## 保存数据###
+
+write.csv(df_combine_lcz,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC1500_heterogeneity20240606/UTC1500_combine_lcz.csv')
+
+
+
+
+###################################### Supplementary Table 20 Heterogeneous Geography GDP ################################################
 
 model <-felm(sentiment ~ 1+ UTC500+
                #UTC500:ifelse(GDP > 1 & GDP <= 5000 , 1, 0) + 
@@ -2529,7 +2127,7 @@ model <-felm(sentiment ~ 1+ UTC500+
 # 查看模型摘要
 print(summary(model))
 # 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable23_Heterogeneous.txt"
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable20_Heterogeneous.txt"
 con <- file(output_file, open = "a")# 打开文件连接，追加模式
 writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
 model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
@@ -2641,7 +2239,7 @@ write.csv(df_combine_gdp,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC500_heterogene
 
 
 
-###################################### Supplementary Table 24 Heterogeneous Geography GDP ################################################
+###################################### Supplementary Table 21 Heterogeneous Geography GDP ################################################
 
 model <-felm(sentiment ~ 1+ UTC1000+
                #UTC1000:ifelse(GDP > 1 & GDP <= 5000 , 1, 0) + 
@@ -2655,7 +2253,7 @@ model <-felm(sentiment ~ 1+ UTC1000+
 # 查看模型摘要
 print(summary(model))
 # 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable24_Heterogeneous.txt"
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable21_Heterogeneous.txt"
 con <- file(output_file, open = "a")# 打开文件连接，追加模式
 writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
 model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
@@ -2765,7 +2363,7 @@ write.csv(df_combine_gdp,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC1000_heterogen
 
 
 
-###################################### Supplementary Table 25 Heterogeneous Geography GDP ################################################
+###################################### Supplementary Table 22 Heterogeneous Geography GDP ################################################
 
 model <-felm(sentiment ~ 1+ UTC1500+
                #UTC1500:ifelse(GDP > 1 & GDP <= 5000 , 1, 0) + 
@@ -2779,7 +2377,7 @@ model <-felm(sentiment ~ 1+ UTC1500+
 # 查看模型摘要
 print(summary(model))
 # 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable25_Heterogeneous.txt"
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable22_Heterogeneous.txt"
 con <- file(output_file, open = "a")# 打开文件连接，追加模式
 writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
 model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
@@ -2891,7 +2489,7 @@ write.csv(df_combine_gdp,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC1500_heterogen
 
 
 
-###################################### Supplementary Table 26 Heterogeneous CityScale################################################
+###################################### Supplementary Table 23 Heterogeneous CityScale################################################
 
 model <-felm(sentiment ~ 1+ UTC500+
                #UTC500:ifelse(CityScale=="Small_sized_city(0-50)" , 1, 0) + 
@@ -2905,7 +2503,7 @@ model <-felm(sentiment ~ 1+ UTC500+
 # 查看模型摘要
 print(summary(model))
 # 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable26_Heterogeneous.txt"
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable23_Heterogeneous.txt"
 con <- file(output_file, open = "a")# 打开文件连接，追加模式
 writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
 model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
@@ -3019,7 +2617,7 @@ write.csv(df_combine_CityScale,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC500_hete
 
 
 
-###################################### Supplementary Table 27 Heterogeneous CityScale################################################
+###################################### Supplementary Table 24 Heterogeneous CityScale################################################
 
 model <-felm(sentiment ~ 1+ UTC1000+
                #UTC1000:ifelse(CityScale=="Small_sized_city(0-50)" , 1, 0) + 
@@ -3033,7 +2631,7 @@ model <-felm(sentiment ~ 1+ UTC1000+
 # 查看模型摘要
 print(summary(model))
 # 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable27_Heterogeneous.txt"
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable24_Heterogeneous.txt"
 con <- file(output_file, open = "a")# 打开文件连接，追加模式
 writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
 model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
@@ -3146,7 +2744,7 @@ write.csv(df_combine_CityScale,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC1000_het
 
 
 
-###################################### Supplementary Table 28 Heterogeneous CityScale################################################
+###################################### Supplementary Table 25 Heterogeneous CityScale################################################
 
 model <-felm(sentiment ~ 1+ UTC1500+
                #UTC1500:ifelse(CityScale=="Small_sized_city(0-50)" , 1, 0) + 
@@ -3160,7 +2758,7 @@ model <-felm(sentiment ~ 1+ UTC1500+
 # 查看模型摘要
 print(summary(model))
 # 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable28_Heterogeneous.txt"
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable25_Heterogeneous.txt"
 con <- file(output_file, open = "a")# 打开文件连接，追加模式
 writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
 model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
@@ -3270,6 +2868,398 @@ df_combine_CityScale <- rbind(
 ## 保存数据###
 
 write.csv(df_combine_CityScale,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC1500_heterogeneity20240606/UTC1500_combine_CityScale.csv')
+
+
+
+##################################################UTC 500 season Supplementary  Table 26 ###################################################################
+
+
+
+model <- felm(sentiment ~ 1+ UTC500+
+                #UTC500:ifelse(yearmonth == "Y2018M10" | yearmonth == "Y2018M11" | yearmonth == "Y2018M12" | yearmonth == "Y2019M10" | yearmonth == "Y2019M11" | yearmonth == "Y2019M12", 1, 0) +  
+                UTC500:ifelse(yearmonth == "Y2018M01" | yearmonth == "Y2018M02" | yearmonth == "Y2018M03" | yearmonth == "Y2019M01" | yearmonth == "Y2019M02" | yearmonth == "Y2019M03", 1, 0) +  
+                UTC500:ifelse(yearmonth == "Y2018M04" | yearmonth == "Y2018M05" | yearmonth == "Y2018M06" | yearmonth == "Y2019M04" | yearmonth == "Y2019M05" | yearmonth == "Y2019M06", 1, 0) +  
+                UTC500:ifelse(yearmonth == "Y2018M07" | yearmonth == "Y2018M08" | yearmonth == "Y2018M09" | yearmonth == "Y2019M07" | yearmonth == "Y2019M08" | yearmonth == "Y2019M09", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 指定输出文件的路径和名称
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable26_Heterogeneous_UTC500_season.txt"
+con <- file(output_file, open = "a")# 打开文件连接，追加模式
+writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
+model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
+writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
+# 关闭文件连接 close(con)
+
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
+df_season_1 <- data.frame(cbind(cfint, coef, `pval`))
+df_season_1$group <- c("A")
+df_season_1$tag <- "1"
+
+
+model <- felm(sentiment ~ 1+ UTC500+
+                UTC500:ifelse(yearmonth == "Y2018M10" | yearmonth == "Y2018M11" | yearmonth == "Y2018M12" | yearmonth == "Y2019M10" | yearmonth == "Y2019M11" | yearmonth == "Y2019M12", 1, 0) +  
+                #UTC500:ifelse(yearmonth == "Y2018M01" | yearmonth == "Y2018M02" | yearmonth == "Y2018M03" | yearmonth == "Y2019M01" | yearmonth == "Y2019M02" | yearmonth == "Y2019M03", 1, 0) +  
+                UTC500:ifelse(yearmonth == "Y2018M04" | yearmonth == "Y2018M05" | yearmonth == "Y2018M06" | yearmonth == "Y2019M04" | yearmonth == "Y2019M05" | yearmonth == "Y2019M06", 1, 0) +  
+                UTC500:ifelse(yearmonth == "Y2018M07" | yearmonth == "Y2018M08" | yearmonth == "Y2018M09" | yearmonth == "Y2019M07" | yearmonth == "Y2019M08" | yearmonth == "Y2019M09", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
+df_season_2 <- data.frame(cbind(cfint, coef, `pval`))
+df_season_2$group <- c("B")
+df_season_2$tag <- "1"
+
+
+model <- felm(sentiment ~ 1+ UTC500+
+                UTC500:ifelse(yearmonth == "Y2018M10" | yearmonth == "Y2018M11" | yearmonth == "Y2018M12" | yearmonth == "Y2019M10" | yearmonth == "Y2019M11" | yearmonth == "Y2019M12", 1, 0) +  
+                UTC500:ifelse(yearmonth == "Y2018M01" | yearmonth == "Y2018M02" | yearmonth == "Y2018M03" | yearmonth == "Y2019M01" | yearmonth == "Y2019M02" | yearmonth == "Y2019M03", 1, 0) +  
+                #UTC500:ifelse(yearmonth == "Y2018M04" | yearmonth == "Y2018M05" | yearmonth == "Y2018M06" | yearmonth == "Y2019M04" | yearmonth == "Y2019M05" | yearmonth == "Y2019M06", 1, 0) +  
+                UTC500:ifelse(yearmonth == "Y2018M07" | yearmonth == "Y2018M08" | yearmonth == "Y2018M09" | yearmonth == "Y2019M07" | yearmonth == "Y2019M08" | yearmonth == "Y2019M09", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
+df_season_3 <- data.frame(cbind(cfint, coef, `pval`))
+df_season_3$group <- c("C")
+df_season_3$tag <- "1"
+
+
+
+model <- felm(sentiment ~ 1+ UTC500+
+                UTC500:ifelse(yearmonth == "Y2018M10" | yearmonth == "Y2018M11" | yearmonth == "Y2018M12" | yearmonth == "Y2019M10" | yearmonth == "Y2019M11" | yearmonth == "Y2019M12", 1, 0) +  
+                UTC500:ifelse(yearmonth == "Y2018M01" | yearmonth == "Y2018M02" | yearmonth == "Y2018M03" | yearmonth == "Y2019M01" | yearmonth == "Y2019M02" | yearmonth == "Y2019M03", 1, 0) +  
+                UTC500:ifelse(yearmonth == "Y2018M04" | yearmonth == "Y2018M05" | yearmonth == "Y2018M06" | yearmonth == "Y2019M04" | yearmonth == "Y2019M05" | yearmonth == "Y2019M06", 1, 0) +  
+                #UTC500:ifelse(yearmonth == "Y2018M07" | yearmonth == "Y2018M08" | yearmonth == "Y2018M09" | yearmonth == "Y2019M07" | yearmonth == "Y2019M08" | yearmonth == "Y2019M09", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC500", "Pr(>|t|)"]
+df_season_4 <- data.frame(cbind(cfint, coef, `pval`))
+df_season_4$group <- c("D")
+df_season_4$tag <- "1"
+
+
+#年龄画图区域
+df_combine_season <- rbind(
+  df_season_1,df_season_2,df_season_3,df_season_4)
+
+## 保存数据###
+
+write.csv(df_combine_season,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC500_heterogeneity20240606/UTC500_combine_season.csv')
+
+
+
+
+##################################################UTC 500 season SupplementaryTable27###################################################################
+
+
+
+model <- felm(sentiment ~ 1+ UTC1000+
+                #UTC1000:ifelse(yearmonth == "Y2018M10" | yearmonth == "Y2018M11" | yearmonth == "Y2018M12" | yearmonth == "Y2019M10" | yearmonth == "Y2019M11" | yearmonth == "Y2019M12", 1, 0) +  
+                UTC1000:ifelse(yearmonth == "Y2018M01" | yearmonth == "Y2018M02" | yearmonth == "Y2018M03" | yearmonth == "Y2019M01" | yearmonth == "Y2019M02" | yearmonth == "Y2019M03", 1, 0) +  
+                UTC1000:ifelse(yearmonth == "Y2018M04" | yearmonth == "Y2018M05" | yearmonth == "Y2018M06" | yearmonth == "Y2019M04" | yearmonth == "Y2019M05" | yearmonth == "Y2019M06", 1, 0) +  
+                UTC1000:ifelse(yearmonth == "Y2018M07" | yearmonth == "Y2018M08" | yearmonth == "Y2018M09" | yearmonth == "Y2019M07" | yearmonth == "Y2019M08" | yearmonth == "Y2019M09", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 指定输出文件的路径和名称
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable27_Heterogeneous_UTC1000_season.txt"
+con <- file(output_file, open = "a")# 打开文件连接，追加模式
+writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
+model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
+writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
+# 关闭文件连接 close(con)
+
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1000"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
+df_season_1 <- data.frame(cbind(cfint, coef, `pval`))
+df_season_1$group <- c("A")
+df_season_1$tag <- "1"
+
+
+model <- felm(sentiment ~ 1+ UTC1000+
+                UTC1000:ifelse(yearmonth == "Y2018M10" | yearmonth == "Y2018M11" | yearmonth == "Y2018M12" | yearmonth == "Y2019M10" | yearmonth == "Y2019M11" | yearmonth == "Y2019M12", 1, 0) +  
+                #UTC1000:ifelse(yearmonth == "Y2018M01" | yearmonth == "Y2018M02" | yearmonth == "Y2018M03" | yearmonth == "Y2019M01" | yearmonth == "Y2019M02" | yearmonth == "Y2019M03", 1, 0) +  
+                UTC1000:ifelse(yearmonth == "Y2018M04" | yearmonth == "Y2018M05" | yearmonth == "Y2018M06" | yearmonth == "Y2019M04" | yearmonth == "Y2019M05" | yearmonth == "Y2019M06", 1, 0) +  
+                UTC1000:ifelse(yearmonth == "Y2018M07" | yearmonth == "Y2018M08" | yearmonth == "Y2018M09" | yearmonth == "Y2019M07" | yearmonth == "Y2019M08" | yearmonth == "Y2019M09", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1000"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
+df_season_2 <- data.frame(cbind(cfint, coef, `pval`))
+df_season_2$group <- c("B")
+df_season_2$tag <- "1"
+
+
+model <- felm(sentiment ~ 1+ UTC1000+
+                UTC1000:ifelse(yearmonth == "Y2018M10" | yearmonth == "Y2018M11" | yearmonth == "Y2018M12" | yearmonth == "Y2019M10" | yearmonth == "Y2019M11" | yearmonth == "Y2019M12", 1, 0) +  
+                UTC1000:ifelse(yearmonth == "Y2018M01" | yearmonth == "Y2018M02" | yearmonth == "Y2018M03" | yearmonth == "Y2019M01" | yearmonth == "Y2019M02" | yearmonth == "Y2019M03", 1, 0) +  
+                #UTC1000:ifelse(yearmonth == "Y2018M04" | yearmonth == "Y2018M05" | yearmonth == "Y2018M06" | yearmonth == "Y2019M04" | yearmonth == "Y2019M05" | yearmonth == "Y2019M06", 1, 0) +  
+                UTC1000:ifelse(yearmonth == "Y2018M07" | yearmonth == "Y2018M08" | yearmonth == "Y2018M09" | yearmonth == "Y2019M07" | yearmonth == "Y2019M08" | yearmonth == "Y2019M09", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1000"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
+df_season_3 <- data.frame(cbind(cfint, coef, `pval`))
+df_season_3$group <- c("C")
+df_season_3$tag <- "1"
+
+
+
+model <- felm(sentiment ~ 1+ UTC1000+
+                UTC1000:ifelse(yearmonth == "Y2018M10" | yearmonth == "Y2018M11" | yearmonth == "Y2018M12" | yearmonth == "Y2019M10" | yearmonth == "Y2019M11" | yearmonth == "Y2019M12", 1, 0) +  
+                UTC1000:ifelse(yearmonth == "Y2018M01" | yearmonth == "Y2018M02" | yearmonth == "Y2018M03" | yearmonth == "Y2019M01" | yearmonth == "Y2019M02" | yearmonth == "Y2019M03", 1, 0) +  
+                UTC1000:ifelse(yearmonth == "Y2018M04" | yearmonth == "Y2018M05" | yearmonth == "Y2018M06" | yearmonth == "Y2019M04" | yearmonth == "Y2019M05" | yearmonth == "Y2019M06", 1, 0) +  
+                #UTC1000:ifelse(yearmonth == "Y2018M07" | yearmonth == "Y2018M08" | yearmonth == "Y2018M09" | yearmonth == "Y2019M07" | yearmonth == "Y2019M08" | yearmonth == "Y2019M09", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1000"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1000", "Pr(>|t|)"]
+df_season_4 <- data.frame(cbind(cfint, coef, `pval`))
+df_season_4$group <- c("D")
+df_season_4$tag <- "1"
+
+
+#年龄画图区域
+df_combine_season <- rbind(
+  df_season_1,df_season_2,df_season_3,df_season_4)
+
+## 保存数据###
+
+write.csv(df_combine_season,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC1000_heterogeneity20240606/UTC1000_combine_season.csv')
+
+
+
+##################################################UTC 500 season SupplementaryTable28 ###################################################################
+
+
+
+model <- felm(sentiment ~ 1+ UTC1500+
+                #UTC1500:ifelse(yearmonth == "Y2018M10" | yearmonth == "Y2018M11" | yearmonth == "Y2018M12" | yearmonth == "Y2019M10" | yearmonth == "Y2019M11" | yearmonth == "Y2019M12", 1, 0) +  
+                UTC1500:ifelse(yearmonth == "Y2018M01" | yearmonth == "Y2018M02" | yearmonth == "Y2018M03" | yearmonth == "Y2019M01" | yearmonth == "Y2019M02" | yearmonth == "Y2019M03", 1, 0) +  
+                UTC1500:ifelse(yearmonth == "Y2018M04" | yearmonth == "Y2018M05" | yearmonth == "Y2018M06" | yearmonth == "Y2019M04" | yearmonth == "Y2019M05" | yearmonth == "Y2019M06", 1, 0) +  
+                UTC1500:ifelse(yearmonth == "Y2018M07" | yearmonth == "Y2018M08" | yearmonth == "Y2018M09" | yearmonth == "Y2019M07" | yearmonth == "Y2019M08" | yearmonth == "Y2019M09", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 指定输出文件的路径和名称
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable28_Heterogeneous_UTC1500_season.txt"
+con <- file(output_file, open = "a")# 打开文件连接，追加模式
+writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
+model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
+writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
+# 关闭文件连接 close(con)
+
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
+df_season_1 <- data.frame(cbind(cfint, coef, `pval`))
+df_season_1$group <- c("A")
+df_season_1$tag <- "1"
+
+
+model <- felm(sentiment ~ 1+ UTC1500+
+                UTC1500:ifelse(yearmonth == "Y2018M10" | yearmonth == "Y2018M11" | yearmonth == "Y2018M12" | yearmonth == "Y2019M10" | yearmonth == "Y2019M11" | yearmonth == "Y2019M12", 1, 0) +  
+                #UTC1500:ifelse(yearmonth == "Y2018M01" | yearmonth == "Y2018M02" | yearmonth == "Y2018M03" | yearmonth == "Y2019M01" | yearmonth == "Y2019M02" | yearmonth == "Y2019M03", 1, 0) +  
+                UTC1500:ifelse(yearmonth == "Y2018M04" | yearmonth == "Y2018M05" | yearmonth == "Y2018M06" | yearmonth == "Y2019M04" | yearmonth == "Y2019M05" | yearmonth == "Y2019M06", 1, 0) +  
+                UTC1500:ifelse(yearmonth == "Y2018M07" | yearmonth == "Y2018M08" | yearmonth == "Y2018M09" | yearmonth == "Y2019M07" | yearmonth == "Y2019M08" | yearmonth == "Y2019M09", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
+df_season_2 <- data.frame(cbind(cfint, coef, `pval`))
+df_season_2$group <- c("B")
+df_season_2$tag <- "1"
+
+
+model <- felm(sentiment ~ 1+ UTC1500+
+                UTC1500:ifelse(yearmonth == "Y2018M10" | yearmonth == "Y2018M11" | yearmonth == "Y2018M12" | yearmonth == "Y2019M10" | yearmonth == "Y2019M11" | yearmonth == "Y2019M12", 1, 0) +  
+                UTC1500:ifelse(yearmonth == "Y2018M01" | yearmonth == "Y2018M02" | yearmonth == "Y2018M03" | yearmonth == "Y2019M01" | yearmonth == "Y2019M02" | yearmonth == "Y2019M03", 1, 0) +  
+                #UTC1500:ifelse(yearmonth == "Y2018M04" | yearmonth == "Y2018M05" | yearmonth == "Y2018M06" | yearmonth == "Y2019M04" | yearmonth == "Y2019M05" | yearmonth == "Y2019M06", 1, 0) +  
+                UTC1500:ifelse(yearmonth == "Y2018M07" | yearmonth == "Y2018M08" | yearmonth == "Y2018M09" | yearmonth == "Y2019M07" | yearmonth == "Y2019M08" | yearmonth == "Y2019M09", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+#close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
+df_season_3 <- data.frame(cbind(cfint, coef, `pval`))
+df_season_3$group <- c("C")
+df_season_3$tag <- "1"
+
+
+
+model <- felm(sentiment ~ 1+ UTC1500+
+                UTC1500:ifelse(yearmonth == "Y2018M10" | yearmonth == "Y2018M11" | yearmonth == "Y2018M12" | yearmonth == "Y2019M10" | yearmonth == "Y2019M11" | yearmonth == "Y2019M12", 1, 0) +  
+                UTC1500:ifelse(yearmonth == "Y2018M01" | yearmonth == "Y2018M02" | yearmonth == "Y2018M03" | yearmonth == "Y2019M01" | yearmonth == "Y2019M02" | yearmonth == "Y2019M03", 1, 0) +  
+                UTC1500:ifelse(yearmonth == "Y2018M04" | yearmonth == "Y2018M05" | yearmonth == "Y2018M06" | yearmonth == "Y2019M04" | yearmonth == "Y2019M05" | yearmonth == "Y2019M06", 1, 0) +  
+                #UTC1500:ifelse(yearmonth == "Y2018M07" | yearmonth == "Y2018M08" | yearmonth == "Y2018M09" | yearmonth == "Y2019M07" | yearmonth == "Y2019M08" | yearmonth == "Y2019M09", 1, 0) + 
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName ,  data = query_sample2 )
+
+# 查看模型摘要
+print(summary(model))
+
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+close(con)
+
+coef <- model$coefficients[1:1,]
+cfint <- confint(model, c("UTC1500"),level=0.95)
+colnames(cfint) <- c("min","max")
+pval<-summary(model)$coefficients["UTC1500", "Pr(>|t|)"]
+df_season_4 <- data.frame(cbind(cfint, coef, `pval`))
+df_season_4$group <- c("D")
+df_season_4$tag <- "1"
+
+
+#年龄画图区域
+df_combine_season <- rbind(
+  df_season_1,df_season_2,df_season_3,df_season_4)
+
+## 保存数据###
+
+write.csv(df_combine_season,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC1500_heterogeneity20240606/UTC1500_combine_season.csv')
+
 
 
 
@@ -4000,7 +3990,6 @@ model <-felm(sentiment ~ 1+ UTC500+
                UTC500:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC500:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC500:ifelse(MeanTemperature>32 , 1, 0) + 
-               PM25+
                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                MeanTemperature+
                settlement +nightlight +population
@@ -4035,7 +4024,6 @@ model <-felm(sentiment ~ 1+ UTC500+
                UTC500:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC500:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC500:ifelse(MeanTemperature>32 , 1, 0) + 
-               PM25+
                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                MeanTemperature+
                settlement +nightlight +population
@@ -4066,7 +4054,6 @@ model <-felm(sentiment ~ 1+ UTC500+
                UTC500:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC500:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC500:ifelse(MeanTemperature>32 , 1, 0) + 
-               PM25+
                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                MeanTemperature+
                settlement +nightlight +population
@@ -4095,7 +4082,6 @@ model <- felm(sentiment ~ 1+ UTC500+
                UTC500:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC500:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC500:ifelse(MeanTemperature>32 , 1, 0) + 
-                PM25+
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
                 settlement +nightlight +population
@@ -4124,7 +4110,6 @@ model <- felm(sentiment ~ 1+ UTC500+
                UTC500:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC500:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC500:ifelse(MeanTemperature>32 , 1, 0) +  
-                PM25+
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
                 settlement +nightlight +population
@@ -4154,7 +4139,6 @@ model <- felm(sentiment ~ 1+ UTC500+
                #UTC500:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC500:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC500:ifelse(MeanTemperature>32 , 1, 0) + 
-                PM25+
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
                 settlement +nightlight +population
@@ -4184,7 +4168,6 @@ model <- felm(sentiment ~ 1+ UTC500+
                UTC500:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                #UTC500:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC500:ifelse(MeanTemperature>32 , 1, 0) + 
-                PM25+
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
                 settlement +nightlight +population
@@ -4215,7 +4198,6 @@ model <- felm(sentiment ~ 1+ UTC500+
                UTC500:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC500:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                #UTC500:ifelse(MeanTemperature>32 , 1, 0) + 
-                PM25+
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
                 settlement +nightlight +population
@@ -4271,7 +4253,6 @@ model <-felm(sentiment ~ 1+ UTC1000+
                UTC1000:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC1000:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC1000:ifelse(MeanTemperature>32 , 1, 0) + 
-               PM25+
                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                MeanTemperature+
                settlement +nightlight +population
@@ -4306,7 +4287,6 @@ model <-felm(sentiment ~ 1+ UTC1000+
                UTC1000:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC1000:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC1000:ifelse(MeanTemperature>32 , 1, 0) + 
-               PM25+
                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                MeanTemperature+
                settlement +nightlight +population
@@ -4337,7 +4317,6 @@ model <-felm(sentiment ~ 1+ UTC1000+
                UTC1000:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC1000:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC1000:ifelse(MeanTemperature>32 , 1, 0) + 
-               PM25+
                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                MeanTemperature+
                settlement +nightlight +population
@@ -4366,7 +4345,6 @@ model <- felm(sentiment ~ 1+ UTC1000+
                UTC1000:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC1000:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC1000:ifelse(MeanTemperature>32 , 1, 0) + 
-                PM25+
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
                 settlement +nightlight +population
@@ -4395,7 +4373,6 @@ model <- felm(sentiment ~ 1+ UTC1000+
                UTC1000:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC1000:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC1000:ifelse(MeanTemperature>32 , 1, 0) +  
-                PM25+
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
                 settlement +nightlight +population
@@ -4425,7 +4402,6 @@ model <- felm(sentiment ~ 1+ UTC1000+
                #UTC1000:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC1000:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC1000:ifelse(MeanTemperature>32 , 1, 0) + 
-                PM25+
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
                 settlement +nightlight +population
@@ -4455,7 +4431,6 @@ model <- felm(sentiment ~ 1+ UTC1000+
                UTC1000:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                #UTC1000:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC1000:ifelse(MeanTemperature>32 , 1, 0) + 
-                PM25+
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
                 settlement +nightlight +population
@@ -4486,7 +4461,6 @@ model <- felm(sentiment ~ 1+ UTC1000+
                UTC1000:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC1000:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                #UTC1000:ifelse(MeanTemperature>32 , 1, 0) + 
-                PM25+
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
                 settlement +nightlight +population
@@ -4540,7 +4514,6 @@ model <-felm(sentiment ~ 1+ UTC1500+
                UTC1500:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC1500:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC1500:ifelse(MeanTemperature>32 , 1, 0) + 
-               PM25+
                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                MeanTemperature+
                settlement +nightlight +population
@@ -4575,7 +4548,6 @@ model <-felm(sentiment ~ 1+ UTC1500+
                UTC1500:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC1500:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC1500:ifelse(MeanTemperature>32 , 1, 0) + 
-               PM25+
                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                MeanTemperature+
                settlement +nightlight +population
@@ -4606,7 +4578,6 @@ model <-felm(sentiment ~ 1+ UTC1500+
                UTC1500:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC1500:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC1500:ifelse(MeanTemperature>32 , 1, 0) + 
-               PM25+
                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                MeanTemperature+
                settlement +nightlight +population
@@ -4635,7 +4606,6 @@ model <- felm(sentiment ~ 1+ UTC1500+
                UTC1500:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC1500:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC1500:ifelse(MeanTemperature>32 , 1, 0) + 
-                PM25+
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
                 settlement +nightlight +population
@@ -4664,7 +4634,6 @@ model <- felm(sentiment ~ 1+ UTC1500+
                UTC1500:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC1500:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC1500:ifelse(MeanTemperature>32 , 1, 0) +  
-                PM25+
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
                 settlement +nightlight +population
@@ -4694,7 +4663,6 @@ model <- felm(sentiment ~ 1+ UTC1500+
                #UTC1500:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC1500:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC1500:ifelse(MeanTemperature>32 , 1, 0) + 
-                PM25+
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
                 settlement +nightlight +population
@@ -4724,7 +4692,6 @@ model <- felm(sentiment ~ 1+ UTC1500+
                UTC1500:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                #UTC1500:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                UTC1500:ifelse(MeanTemperature>32 , 1, 0) + 
-                PM25+
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
                 settlement +nightlight +population
@@ -4755,7 +4722,6 @@ model <- felm(sentiment ~ 1+ UTC1500+
                UTC1500:ifelse(MeanTemperature>28 & MeanTemperature<= 30, 1, 0) + 
                UTC1500:ifelse(MeanTemperature>30 & MeanTemperature<= 32, 1, 0) + 
                #UTC1500:ifelse(MeanTemperature>32 , 1, 0) + 
-                PM25+
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
                 settlement +nightlight +population
@@ -4795,9 +4761,6 @@ df_combine_Skintemp2 <- rbind(
 ## 保存数据###
 
 write.csv(df_combine_Skintemp2,'D:/Sentiment_Brazil/R_codes/NewCodes/UTC1500_heterogeneity20240606/UTC1500_combine_Skintemp_2Interval.csv')
-
-
-
 
 
 
