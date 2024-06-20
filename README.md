@@ -52,7 +52,7 @@ Our ideas may partly come from the papers:
 
 [Urbanites’ mental health undermined by air pollution](https://www.nature.com/articles/s41893-022-01032-1)
 
-
+![](/ac.png)
 
 This work was supported in part by part by the German Federal Ministry of Education and Research (BMBF) in the framework of the [international future AI Laboratory](https://ai4eo.de/) "AI4EO-Artificial Intelligence for Earth Observation: Reasoning, Uncertainties, Ethics and Beyond" under Grant 01DD20001, in part by the German Federal Ministry of Economics and Technology in the framework of the "National Center of excellence ML4Earth" under Grant 50EE2201C, and in part by the Excellence Strategy of the Federal Government and the Länder through the TUM Innovation Network EarthCare and by Munich Center for Machine Learning.
 
