@@ -1,5 +1,4 @@
 
-
 rm(list=ls())  # 这行代码是清空当前工作环境中的所有对象，确保你开始一个干净的工作空间
 
 library(DescTools)
@@ -24,15 +23,15 @@ library(car)
 
 library(lfe)
 library(sandwich)
-#
-############################## 读取2018年数据############################################
 
+############################## 读取2018年数据############################################
+## 数据路径
 
 str_year='2018'
 
 str0='D:/Sentiment_Brazil/brazil_twitter_points_2018-2022_sentiment/year'
 file_str0=paste(str0, str_year, '/', sep="")
-file_str=paste(str0, str_year, '/DataDrivingFiles/', sep="")
+file_str=paste(str0, str_year, '/DataDrivingFiles2/', sep="")
 
 ##情感数据名称
 
@@ -97,7 +96,7 @@ CityName=paste('brazil_twitter_points_', str_year,'_CityName', sep='')
 StateName=paste('brazil_twitter_points_', str_year,'_StateName', sep='')
 
 userid=paste('brazil_twitter_points_', str_year,'_userid', sep='')
-useridtotalnumber=paste('brazil_twitter_points_', str_year,'_2018and2022_useridtotalnumber', sep='')
+useridtotalnumber=paste('brazil_twitter_points_', str_year,'_useridtotalnumber_all1819', sep='')
 
 
 Precipitation=paste('brazil_twitter_points_', str_year,'_Precipitation', sep='')
@@ -105,8 +104,8 @@ humidity=paste('brazil_twitter_points_', str_year,'_Relativehumidity_2m', sep=''
 Wind=paste('brazil_twitter_points_', str_year,'_Windspeed_10m', sep='')
 Surface_pressure=paste('brazil_twitter_points_', str_year,'_Surface_pressure', sep='')
 cloudcover=paste('brazil_twitter_points_', str_year,'_cloudcover', sep='')
-MeanTemperature=paste('brazil_twitter_points_', str_year,'_Temperature_2m', sep='')
-
+MeanTemperature=paste('brazil_twitter_points_', str_year,'_Temperature_new20240614', sep='')
+#MeanTemperature=paste('brazil_twitter_points_', str_year,'_Skin_temperature_new20240614', sep='')
 
 
 nightlight=paste('brazil_twitter_points_', str_year,'_nightlight', sep='')
@@ -125,7 +124,9 @@ yearmonthcity=paste('brazil_twitter_points_', str_year,'_yearmonthcity', sep='')
 yearmonthday=paste('brazil_twitter_points_', str_year,'_yearmonthday', sep='')
 diffhours=paste('brazil_twitter_points_', str_year,'_diffhours', sep='')
 
-
+lcz=paste('brazil_twitter_points_', str_year,'_lcz', sep='')
+lcz = loadcsv2(file_str, lcz)
+names(lcz)[1] <- "lcz"
 
 
 ## 读取数据集
@@ -162,6 +163,7 @@ names(cloudcover)[1] <- "cloudcover"
 
 MeanTemperature = loadcsv2(file_str, MeanTemperature)
 MeanTemperature$V1[is.na(MeanTemperature$V1)]<-mean(MeanTemperature$V1,na.rm=TRUE) # 缺少数据变为均值
+MeanTemperature<- MeanTemperature -273.15
 names(MeanTemperature)[1] <- "MeanTemperature"
 
 
@@ -207,28 +209,27 @@ names(yearmonth)[1] <- "yearmonth"
 names(yearmonthday)[1] <- "yearmonthday"
 names(diffhours)[1] <- "diffhours"
 
-
 # 各个变量按列合并
 query_sample2018 <- cbind( sentiment, 
                            yearmonth,yearmonthday,
                            City_area, CityScale,GDP, Geography,
                            UTC500, UTC500_2,UTC1000, UTC1000_2, UTC1500, UTC1500_2, 
-                           Lat,Lon, diffhours,
+                           Lat,Lon, diffhours, lcz,
                            Precipitation, humidity, Wind, Surface_pressure,cloudcover,MeanTemperature,
                            nightlight,population, settlement, impervious, unimpervious, 
                            CityName, StateName, userid, useridtotalnumber)
 
 rm(sentiment, 
    yearmonth,yearmonthday,
-   City_area, CityScale, GDP, Geography,
+   City_area, CityScale,GDP, Geography,
    UTC500, UTC500_2,UTC1000, UTC1000_2, UTC1500, UTC1500_2, 
-   Lat,Lon, diffhours,
+   Lat,Lon, diffhours,lcz,
    Precipitation, humidity, Wind, Surface_pressure,cloudcover,MeanTemperature,
    nightlight,population, settlement, impervious, unimpervious, 
    CityName, StateName, userid, useridtotalnumber)
 
-		   
-		
+
+
 
 
 ############################## 读取2019年数据############################################
@@ -238,7 +239,7 @@ str_year='2019'
 
 str0='D:/Sentiment_Brazil/brazil_twitter_points_2018-2022_sentiment/year'
 file_str0=paste(str0, str_year, '/', sep="")
-file_str=paste(str0, str_year, '/DataDrivingFiles/', sep="")
+file_str=paste(str0, str_year, '/DataDrivingFiles2/', sep="")
 
 ##情感数据名称
 
@@ -303,7 +304,7 @@ CityName=paste('brazil_twitter_points_', str_year,'_CityName', sep='')
 StateName=paste('brazil_twitter_points_', str_year,'_StateName', sep='')
 
 userid=paste('brazil_twitter_points_', str_year,'_userid', sep='')
-useridtotalnumber=paste('brazil_twitter_points_', str_year,'_2018and2022_useridtotalnumber', sep='')
+useridtotalnumber=paste('brazil_twitter_points_', str_year,'_useridtotalnumber_all1819', sep='')
 
 
 Precipitation=paste('brazil_twitter_points_', str_year,'_Precipitation', sep='')
@@ -311,8 +312,8 @@ humidity=paste('brazil_twitter_points_', str_year,'_Relativehumidity_2m', sep=''
 Wind=paste('brazil_twitter_points_', str_year,'_Windspeed_10m', sep='')
 Surface_pressure=paste('brazil_twitter_points_', str_year,'_Surface_pressure', sep='')
 cloudcover=paste('brazil_twitter_points_', str_year,'_cloudcover', sep='')
-MeanTemperature=paste('brazil_twitter_points_', str_year,'_Temperature_2m', sep='')
-
+MeanTemperature=paste('brazil_twitter_points_', str_year,'_Temperature_new20240614', sep='')
+#MeanTemperature=paste('brazil_twitter_points_', str_year,'_Skin_temperature_new20240614', sep='')
 
 
 nightlight=paste('brazil_twitter_points_', str_year,'_nightlight', sep='')
@@ -331,8 +332,9 @@ yearmonthcity=paste('brazil_twitter_points_', str_year,'_yearmonthcity', sep='')
 yearmonthday=paste('brazil_twitter_points_', str_year,'_yearmonthday', sep='')
 diffhours=paste('brazil_twitter_points_', str_year,'_diffhours', sep='')
 
-
-
+lcz=paste('brazil_twitter_points_', str_year,'_lcz', sep='')
+lcz = loadcsv2(file_str, lcz)
+names(lcz)[1] <- "lcz"
 
 ## 读取数据集
 CityName = loadcsv2(file_str, CityName)
@@ -368,6 +370,7 @@ names(cloudcover)[1] <- "cloudcover"
 
 MeanTemperature = loadcsv2(file_str, MeanTemperature)
 MeanTemperature$V1[is.na(MeanTemperature$V1)]<-mean(MeanTemperature$V1,na.rm=TRUE) # 缺少数据变为均值
+MeanTemperature<- MeanTemperature -273.15
 names(MeanTemperature)[1] <- "MeanTemperature"
 
 
@@ -419,7 +422,7 @@ query_sample2019 <- cbind( sentiment,
                            yearmonth,yearmonthday,
                            City_area, CityScale,GDP, Geography,
                            UTC500, UTC500_2,UTC1000, UTC1000_2, UTC1500, UTC1500_2, 
-                           Lat,Lon, diffhours,
+                           Lat,Lon, diffhours,lcz,
                            Precipitation, humidity, Wind, Surface_pressure,cloudcover,MeanTemperature,
                            nightlight,population, settlement, impervious, unimpervious, 
                            CityName, StateName, userid, useridtotalnumber)
@@ -428,7 +431,7 @@ rm(sentiment,
    yearmonth,yearmonthday,
    City_area, CityScale,GDP, Geography,
    UTC500, UTC500_2,UTC1000, UTC1000_2, UTC1500, UTC1500_2, 
-   Lat,Lon, diffhours,
+   Lat,Lon, diffhours,lcz,
    Precipitation, humidity, Wind, Surface_pressure,cloudcover,MeanTemperature,
    nightlight,population, settlement, impervious, unimpervious, 
    CityName, StateName, userid, useridtotalnumber)
@@ -439,42 +442,72 @@ rm(sentiment,
 
 query_sample <- rbind(query_sample2018, query_sample2019)
 
+###########################################################################################
+#rm(query_sample2018, query_sample2019) #清空变量
+## 样列分析：
+# 选择满足特定条件的数据的所有行进行分析
+#subset_data <- data[data$y %in% c("A", "C"), ]
+# 选择满足特定条件的数据的所有行进行分析
+#subset_data <- query_sample[query_sample$keyword %in% c("X", "Y"), ]
+# 选取夏天时间的数据进行实验
+#query_sample <- query_sample0[query_sample0$yearmonth %in% c("Y2018M01", "Y2018M02", "Y2018M03","Y2018M04","Y2018M05", "Y2018M10","Y2018M11", "Y2018M12",
+#"Y2019M01", "Y2019M02", "Y2019M03","Y2019M04","Y2019M05", "Y2019M10","Y2019M11", "Y2019M12"), ] # yearmonth summer
+## 去除RS,SC 2个州的冬天数据
+#query_sample <- subset(query_sample0, !(StateName %in% c("RS", "SC") & yearmonth %in% c("Y2018M06", "Y2018M07","Y2018M08","Y2019M06", "Y2019M07","Y2019M08") ) )
+#rm(subset_data)
 
 
-rm(query_sample2018, query_sample2019) #清空变量
 
+###################################### 去除异常值####################################
+query_sample2<-subset(query_sample, !(sentiment < 0.15 & UTC500>0.30) )
 
-
-
-## 去除异常值，比如 sentiment<0.4, 但是UTC>0.2; sentiment >0.85 & UTC500<0.05
-query_sample2<-subset(query_sample, !(sentiment < 0.3 & UTC500>0.2) )
-query_sample2<-subset(query_sample2, !(sentiment >0.9 & UTC500<0.05))
-
+query_sample4<- query_sample2
 query_sample2 = subset(query_sample2, (useridtotalnumber>100) ) # 过滤tweet文本过少的数据
+query_sample2 <- na.omit(query_sample2) # 删除缺少项
+
 
 rm(query_sample)
 rm(Lat_sentiment_TUC)
 #summary(query_sample2)
 
-
+#################################### 去取变量均值与标准差####################################
 sd_utc5<-sd(query_sample2$UTC500)
 sd_utc10<-sd(query_sample2$UTC1000)
 sd_utc15<-sd(query_sample2$UTC1500)
 sd_sent<-sd(query_sample2$sentiment)
-
 mean_utc5<-mean(query_sample2$UTC500)
 mean_utc10<-mean(query_sample2$UTC1000)
 mean_utc15<-mean(query_sample2$UTC1500)
 mean_sent<-mean(query_sample2$sentiment)
 
+#Precipitation, humidity, Wind, Surface_pressure,cloudcover,MeanTemperature,
+
+mean_Precipitation<- mean(query_sample2$Precipitation)
+sd_Precipitation<- sd(query_sample2$Precipitation)
+
+mean_humidity<- mean(query_sample2$humidity)
+sd_humidity<- sd(query_sample2$humidity)
+
+mean_Wind<-mean(query_sample2$Wind)
+sd_Wind<-sd(query_sample2$Wind)
+
+mean_cloudcover<-mean(query_sample2$cloudcover)
+sd_cloudcover<-sd(query_sample2$cloudcover)
+
+mean_MeanTemperature<-mean(query_sample2$MeanTemperature)
+sd_MeanTemperature<-sd(query_sample2$MeanTemperature)
 
 mean_Surface_pressure<-mean(query_sample2$Surface_pressure)
 sd_Surface_pressure<-sd(query_sample2$Surface_pressure)
 
+
+
 mean_nightlight<-mean(query_sample2$nightlight)
 sd_nightlight<-sd(query_sample2$nightlight)
+
 mean_population<-mean(query_sample2$population)
 sd_population<-sd(query_sample2$population)
+
 mean_settlement<-mean(query_sample2$settlement)
 sd_settlement<-sd(query_sample2$settlement)
 
@@ -483,17 +516,8 @@ sd_settlement<-sd(query_sample2$settlement)
 mean_unimpervious<-mean(query_sample2$unimpervious)
 sd_unimpervious<-sd(query_sample2$unimpervious)
 
-#write.csv(query_sample2$unimpervious,'D:/Sentiment_Brazil/R_codes/Effect202400508/unimpervious.csv')
-
-
-## 去除异常值，比如 sentiment<0.4, 但是UTC>0.2; sentiment >0.85 & UTC500<0.05
-query_sample4<-subset(query_sample, !(sentiment < 0.3 & UTC500>0.2) )
-query_sample4<-subset(query_sample4, !(sentiment >0.9 & UTC500<0.05))
-
-# 过滤tweet文本过少的数据阈值设为：50, 100, 150, 200, 250, 300,
-rm(query_sample)
-
-#################################################主模型UTC 500###########################################################################
+write.csv(query_sample2$unimpervious,'D:/Sentiment_Brazil/R_codes/NewCodes/Effect202400508/unimpervious.csv')
+##############################################主模型UTC 500###########################################################################
 
 
 model <- felm(sentiment ~ 1+ UTC500 +
@@ -506,8 +530,11 @@ model <- felm(sentiment ~ 1+ UTC500 +
 # 查看模型摘要
 print(summary(model))
 
+
+
+
 # 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/ResultsUTC500_fix_indivdual_city_day_20240606.txt"
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/Table1ResultsUTC500.txt"
 con <- file(output_file, open = "a")# 打开文件连接，追加模式
 writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
 model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
@@ -535,7 +562,7 @@ print(vif_values)
 model <- felm(UTC500 ~ unimpervious+ 
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
-                settlement +nightlight +population,  data =  query_sample2)
+                settlement +nightlight +population|yearmonthday+userid+ CityName,  data =  query_sample2)
 
 
 # 查看模型摘要
@@ -569,7 +596,7 @@ cat(model_summary, file = output_file, sep = "\n", append = TRUE)
 model <- felm(UTC500 ~ unimpervious+ 
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
-                settlement +nightlight +population,  data =  query_sample2)
+                settlement +nightlight +population|yearmonthday+userid+ CityName,  data =  query_sample2)
 
 
 # 查看模型摘要
@@ -597,7 +624,7 @@ model <- felm(sentiment ~ 1+ UTC1000 +
 print(summary(model))
 
 # 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/ResultsUTC1000_fix_indivdual_city_day_20240606.txt"
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable2ResultsUTC1000.txt"
 con <- file(output_file, open = "a")# 打开文件连接，追加模式
 writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
 model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
@@ -625,7 +652,7 @@ print(vif_values)
 model <- felm(UTC1000 ~ unimpervious+ 
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
-                settlement +nightlight +population,  data =  query_sample2)
+                settlement +nightlight +population|yearmonthday+userid+ CityName,  data =  query_sample2)
 
 
 # 查看模型摘要
@@ -659,7 +686,7 @@ cat(model_summary, file = output_file, sep = "\n", append = TRUE)
 model <- felm(UTC1000 ~ unimpervious+ 
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
-                settlement +nightlight +population,  data =  query_sample2)
+                settlement +nightlight +population|yearmonthday+userid+ CityName,  data =  query_sample2)
 
 
 # 查看模型摘要
@@ -685,7 +712,7 @@ model <- felm(sentiment ~ 1+ UTC1500 +
 print(summary(model))
 
 # 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/ResultsUTC1500_fix_indivdual_city_day_20240606.txt"
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable3ResultsUTC1500.txt"
 con <- file(output_file, open = "a")# 打开文件连接，追加模式
 writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
 model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
@@ -713,7 +740,7 @@ print(vif_values)
 model <- felm(UTC1500 ~ unimpervious+ 
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
-                settlement +nightlight +population,  data =  query_sample2)
+                settlement +nightlight +population|yearmonthday+userid+ CityName,  data =  query_sample2)
 
 
 # 查看模型摘要
@@ -747,7 +774,7 @@ cat(model_summary, file = output_file, sep = "\n", append = TRUE)
 model <- felm(UTC1500 ~ unimpervious+ 
                 Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
                 MeanTemperature+
-                settlement +nightlight +population,  data =  query_sample2)
+                settlement +nightlight +population|yearmonthday+userid+ CityName,  data =  query_sample2)
 
 
 # 查看模型摘要
@@ -826,7 +853,587 @@ close(con)
 
 
 
-####################################### nonlinear regression model Supplementary Table 5. #######################################
+
+####################################### Supplementary Table5 Robustness_Test. #######################################
+
+
+model <- felm(sentiment ~ 1+ UTC500 
+              |yearmonthday+userid+ CityName,  data = query_sample2)
+# 查看模型摘要
+print(summary(model))
+# 指定输出文件的路径和名称
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable5_Robustness_Test.txt"
+con <- file(output_file, open = "a")# 打开文件连接，追加模式
+writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
+model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
+writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
+
+
+model <- felm(sentiment ~ 1+ UTC500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature
+              |yearmonthday+userid+ CityName,  data = query_sample2)
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+model <- felm(sentiment ~ 1+ UTC500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +population
+              |yearmonthday+userid+ CityName,  data = query_sample2)
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+
+model <- felm(sentiment ~ 1+ UTC500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = query_sample2)
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+close(con)
+
+
+####################################### Supplementary Table6 Robustness_Test. #######################################
+
+
+
+model <- felm(sentiment ~ 1+ UTC1000 
+              |yearmonthday+userid+ CityName,  data = query_sample2)
+# 查看模型摘要
+print(summary(model))
+# 指定输出文件的路径和名称
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable6_Robustness_Test.txt"
+con <- file(output_file, open = "a")# 打开文件连接，追加模式
+writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
+model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
+writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
+
+
+model <- felm(sentiment ~ 1+ UTC1000 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature
+              |yearmonthday+userid+ CityName,  data = query_sample2)
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+model <- felm(sentiment ~ 1+ UTC1000 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +population
+              |yearmonthday+userid+ CityName,  data = query_sample2)
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+
+model <- felm(sentiment ~ 1+ UTC1000 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = query_sample2)
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+close(con)
+
+
+####################################### Supplementary Table7 Robustness_Test. #######################################
+
+model <- felm(sentiment ~ 1+ UTC1500 
+              |yearmonthday+userid+ CityName,  data = query_sample2)
+# 查看模型摘要
+print(summary(model))
+# 指定输出文件的路径和名称
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable7_Robustness_Test.txt"
+con <- file(output_file, open = "a")# 打开文件连接，追加模式
+writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
+model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
+writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
+
+
+model <- felm(sentiment ~ 1+ UTC1500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature
+              |yearmonthday+userid+ CityName,  data = query_sample2)
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+model <- felm(sentiment ~ 1+ UTC1500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +population
+              |yearmonthday+userid+ CityName,  data = query_sample2)
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+
+model <- felm(sentiment ~ 1+ UTC1500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = query_sample2)
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+close(con)
+
+
+
+
+
+#################################### Supplementary Table 8 Robustness_Test ################################
+
+query_sample2018 <- query_sample2[query_sample2$yearmonth %in% c("Y2018M01", "Y2018M02", "Y2018M03","Y2018M04","Y2018M05", "Y2018M06", 
+                                                       "Y2018M07", "Y2018M08", "Y2018M09", "Y2018M10","Y2018M11", "Y2018M12"),] # yearmonth summer
+
+query_sample2019 <- query_sample2[query_sample2$yearmonth %in% c("Y2019M01", "Y2019M02", "Y2019M03","Y2019M04","Y2019M05", "Y2019M06", 
+                                                     "Y2019M07", "Y2019M08", "Y2019M09", "Y2019M10","Y2019M11", "Y2019M12"),] # yearmonth summer
+
+
+# 选取2018数据进行实验
+
+model <- felm(sentiment ~ 1+ UTC500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = query_sample2018)
+
+
+# 查看模型摘要
+print(summary(model))
+# 指定输出文件的路径和名称
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable8_Robustness_Test.txt"
+con <- file(output_file, open = "a")# 打开文件连接，追加模式
+writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
+model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
+writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
+
+
+
+# 选取2019数据进行实验
+model <- felm(sentiment ~ 1+ UTC500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = query_sample2019)
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+
+# 选取2018数据进行实验
+
+model <- felm(sentiment ~ 1+ UTC1000 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = query_sample2018)
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+# 选取2019数据进行实验
+model <- felm(sentiment ~ 1+ UTC1000 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = query_sample2019)
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+
+# 选取2018数据进行实验
+
+model <- felm(sentiment ~ 1+ UTC1500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = query_sample2018)
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+# 选取2019数据进行实验
+model <- felm(sentiment ~ 1+ UTC1500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = query_sample2019)
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+close(con)
+
+
+
+######################################### Supplementary Table 9 Robustness_Test #############################
+
+model <- felm(sentiment ~ 1+ UTC500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>50)))
+
+
+# 查看模型摘要
+print(summary(model))
+
+# 指定输出文件的路径和名称
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable9_Robustness_Test.txt"
+con <- file(output_file, open = "a") # 打开文件连接
+model_summary <- capture.output(summary(model)) # 捕获模型摘要的输出
+writeLines(model_summary, con = output_file) # 将模型摘要写入文件
+# 关闭文件连接
+#close(con)
+
+
+model <- felm(sentiment ~ 1+ UTC500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>100)))
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+
+
+model <- felm(sentiment ~ 1+ UTC500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>150)))
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+
+
+
+model <- felm(sentiment ~ 1+ UTC500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>200)))
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+model <- felm(sentiment ~ 1+ UTC500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>250)))
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+
+model <- felm(sentiment ~ 1+ UTC500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>300)))
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+close(con)
+
+
+
+
+
+######################################### Supplementary Table 10 Robustness_Test #############################
+
+model <- felm(sentiment ~ 1+ UTC1000 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>50)))
+
+
+# 查看模型摘要
+print(summary(model))
+
+# 指定输出文件的路径和名称
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable10_Robustness_Test.txt"
+con <- file(output_file, open = "a") # 打开文件连接
+model_summary <- capture.output(summary(model)) # 捕获模型摘要的输出
+writeLines(model_summary, con = output_file) # 将模型摘要写入文件
+# 关闭文件连接
+#close(con)
+
+
+model <- felm(sentiment ~ 1+ UTC1000 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>100)))
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+
+
+model <- felm(sentiment ~ 1+ UTC1000 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>150)))
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+
+
+
+model <- felm(sentiment ~ 1+ UTC1000 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>200)))
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+model <- felm(sentiment ~ 1+ UTC1000 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>250)))
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+
+model <- felm(sentiment ~ 1+ UTC1000 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>300)))
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+close(con)
+
+
+
+######################################### Supplementary Table 11 Robustness_Test #############################
+
+model <- felm(sentiment ~ 1+ UTC1500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>50)))
+
+
+# 查看模型摘要
+print(summary(model))
+
+# 指定输出文件的路径和名称
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable11_Robustness_Test.txt"
+con <- file(output_file, open = "a") # 打开文件连接
+model_summary <- capture.output(summary(model)) # 捕获模型摘要的输出
+writeLines(model_summary, con = output_file) # 将模型摘要写入文件
+# 关闭文件连接
+#close(con)
+
+
+model <- felm(sentiment ~ 1+ UTC1500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>100)))
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+
+
+model <- felm(sentiment ~ 1+ UTC1500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>150)))
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+
+
+
+model <- felm(sentiment ~ 1+ UTC1500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>200)))
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+model <- felm(sentiment ~ 1+ UTC1500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>250)))
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+
+model <- felm(sentiment ~ 1+ UTC1500 +
+                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
+                MeanTemperature+
+                settlement +nightlight +population
+              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>300)))
+
+
+# 查看模型摘要
+print(summary(model))
+# 捕获第n个模型摘要的输出
+model_summary <- capture.output(summary(model))
+# 将第n个模型的输出追加到同一个txt文件中
+cat(model_summary, file = output_file, sep = "\n", append = TRUE)
+
+close(con)
+
+
+
+
+####################################### nonlinear regression model Supplementary Table 12. #######################################
 
 
 model <- felm(sentiment ~ 1+ UTC500 + UTC500_2+
@@ -837,7 +1444,7 @@ model <- felm(sentiment ~ 1+ UTC500 + UTC500_2+
 # 查看模型摘要
 print(summary(model))
 # 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable5_nonlinear_regression.txt"
+output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable12_nonlinear_regression.txt"
 con <- file(output_file, open = "a")# 打开文件连接，追加模式
 writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
 model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
@@ -875,585 +1482,5 @@ model_summary <- capture.output(summary(model))
 # 将第n个模型的输出追加到同一个txt文件中
 cat(model_summary, file = output_file, sep = "\n", append = TRUE)
 close(con)
-
-
-
-####################################### Supplementary Table7 Robustness_Test. #######################################
-
-
-model <- felm(sentiment ~ 1+ UTC500 
-              |yearmonthday+userid+ CityName,  data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable7_Robustness_Test.txt"
-con <- file(output_file, open = "a")# 打开文件连接，追加模式
-writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
-model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
-writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
-
-
-model <- felm(sentiment ~ 1+ UTC500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature
-              |yearmonthday+userid+ CityName,  data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-model <- felm(sentiment ~ 1+ UTC500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +population
-              |yearmonthday+userid+ CityName,  data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-model <- felm(sentiment ~ 1+ UTC500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-close(con)
-
-
-####################################### Supplementary Table8 Robustness_Test. #######################################
-
-
-
-model <- felm(sentiment ~ 1+ UTC1000 
-              |yearmonthday+userid+ CityName,  data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable8_Robustness_Test.txt"
-con <- file(output_file, open = "a")# 打开文件连接，追加模式
-writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
-model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
-writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
-
-
-model <- felm(sentiment ~ 1+ UTC1000 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature
-              |yearmonthday+userid+ CityName,  data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-model <- felm(sentiment ~ 1+ UTC1000 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +population
-              |yearmonthday+userid+ CityName,  data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-model <- felm(sentiment ~ 1+ UTC1000 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-close(con)
-
-
-####################################### Supplementary Table9 Robustness_Test. #######################################
-
-model <- felm(sentiment ~ 1+ UTC1500 
-              |yearmonthday+userid+ CityName,  data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable9_Robustness_Test.txt"
-con <- file(output_file, open = "a")# 打开文件连接，追加模式
-writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
-model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
-writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
-
-
-model <- felm(sentiment ~ 1+ UTC1500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature
-              |yearmonthday+userid+ CityName,  data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-model <- felm(sentiment ~ 1+ UTC1500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +population
-              |yearmonthday+userid+ CityName,  data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-model <- felm(sentiment ~ 1+ UTC1500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = query_sample2)
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-close(con)
-
-
-
-
-
-#################################### Supplementary Table 10 Robustness_Test ################################
-
-query_sample2018 <- query_sample2[query_sample2$yearmonth %in% c("Y2018M01", "Y2018M02", "Y2018M03","Y2018M04","Y2018M05", "Y2018M06", 
-                                                       "Y2018M07", "Y2018M08", "Y2018M09", "Y2018M10","Y2018M11", "Y2018M12"),] # yearmonth summer
-
-query_sample2019 <- query_sample2[query_sample2$yearmonth %in% c("Y2019M01", "Y2019M02", "Y2019M03","Y2019M04","Y2019M05", "Y2019M06", 
-                                                     "Y2019M07", "Y2019M08", "Y2019M09", "Y2019M10","Y2019M11", "Y2019M12"),] # yearmonth summer
-
-
-# 选取2018数据进行实验
-
-model <- felm(sentiment ~ 1+ UTC500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = query_sample2018)
-
-
-# 查看模型摘要
-print(summary(model))
-# 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable10_Robustness_Test.txt"
-con <- file(output_file, open = "a")# 打开文件连接，追加模式
-writeLines("\n--- New Model Summary ---\n", con)# 写入一个分隔符（可选），以便区分不同的模型摘要
-model_summary <- capture.output(summary(model))# 捕获模型摘要的输出
-writeLines(model_summary, con = output_file)# 将模型摘要追加写入文件
-
-
-
-# 选取2019数据进行实验
-model <- felm(sentiment ~ 1+ UTC500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = query_sample2019)
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-# 选取2018数据进行实验
-
-model <- felm(sentiment ~ 1+ UTC1000 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = query_sample2018)
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-# 选取2019数据进行实验
-model <- felm(sentiment ~ 1+ UTC1000 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = query_sample2019)
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-# 选取2018数据进行实验
-
-model <- felm(sentiment ~ 1+ UTC1500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = query_sample2018)
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-# 选取2019数据进行实验
-model <- felm(sentiment ~ 1+ UTC1500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = query_sample2019)
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-close(con)
-
-
-
-######################################### Supplementary Table 11 Robustness_Test #############################
-
-model <- felm(sentiment ~ 1+ UTC500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>50)))
-
-
-# 查看模型摘要
-print(summary(model))
-
-# 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable11_Robustness_Test.txt"
-con <- file(output_file, open = "a") # 打开文件连接
-model_summary <- capture.output(summary(model)) # 捕获模型摘要的输出
-writeLines(model_summary, con = output_file) # 将模型摘要写入文件
-# 关闭文件连接
-#close(con)
-
-
-model <- felm(sentiment ~ 1+ UTC500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>100)))
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-
-model <- felm(sentiment ~ 1+ UTC500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>150)))
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-
-
-model <- felm(sentiment ~ 1+ UTC500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>200)))
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-model <- felm(sentiment ~ 1+ UTC500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>250)))
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-model <- felm(sentiment ~ 1+ UTC500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>300)))
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-close(con)
-
-
-
-
-
-######################################### Supplementary Table 12 Robustness_Test #############################
-
-model <- felm(sentiment ~ 1+ UTC1000 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>50)))
-
-
-# 查看模型摘要
-print(summary(model))
-
-# 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable12_Robustness_Test.txt"
-con <- file(output_file, open = "a") # 打开文件连接
-model_summary <- capture.output(summary(model)) # 捕获模型摘要的输出
-writeLines(model_summary, con = output_file) # 将模型摘要写入文件
-# 关闭文件连接
-#close(con)
-
-
-model <- felm(sentiment ~ 1+ UTC1000 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>100)))
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-
-model <- felm(sentiment ~ 1+ UTC1000 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>150)))
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-
-
-model <- felm(sentiment ~ 1+ UTC1000 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>200)))
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-model <- felm(sentiment ~ 1+ UTC1000 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>250)))
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-model <- felm(sentiment ~ 1+ UTC1000 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>300)))
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-close(con)
-
-
-
-######################################### Supplementary Table 13 Robustness_Test #############################
-
-model <- felm(sentiment ~ 1+ UTC1500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>50)))
-
-
-# 查看模型摘要
-print(summary(model))
-
-# 指定输出文件的路径和名称
-output_file <- "D:/Sentiment_Brazil/R_codes/NewCodes/SupplementaryTable13_Robustness_Test.txt"
-con <- file(output_file, open = "a") # 打开文件连接
-model_summary <- capture.output(summary(model)) # 捕获模型摘要的输出
-writeLines(model_summary, con = output_file) # 将模型摘要写入文件
-# 关闭文件连接
-#close(con)
-
-
-model <- felm(sentiment ~ 1+ UTC1500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>100)))
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-
-model <- felm(sentiment ~ 1+ UTC1500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>150)))
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-
-
-model <- felm(sentiment ~ 1+ UTC1500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>200)))
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-model <- felm(sentiment ~ 1+ UTC1500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>250)))
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-
-model <- felm(sentiment ~ 1+ UTC1500 +
-                Precipitation+  humidity+ Wind + cloudcover+ Surface_pressure+
-                MeanTemperature+
-                settlement +nightlight +population
-              |yearmonthday+userid+ CityName,  data = subset(query_sample4, (useridtotalnumber>300)))
-
-
-# 查看模型摘要
-print(summary(model))
-# 捕获第n个模型摘要的输出
-model_summary <- capture.output(summary(model))
-# 将第n个模型的输出追加到同一个txt文件中
-cat(model_summary, file = output_file, sep = "\n", append = TRUE)
-
-close(con)
-
-
 
 
