@@ -54,7 +54,7 @@ Our ideas may partly come from the papers:
 
 ![](/ac.png)
 
-[international future AI Laboratory](https://ai4eo.de/)
+[International Future AI Laboratory](https://ai4eo.de/)
 
 
 
