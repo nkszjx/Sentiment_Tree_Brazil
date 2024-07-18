@@ -47,14 +47,15 @@ library(tiff)
 
 str0='D:/Sentiment_Brazil/R_codes/NewCodes/gini_style_data/'
 
+path01='year2019Month11day16/'
 
 file_tree='brazil_twitter_points_2019_11_d16_1000_tree'
 file_sentiment='brazil_twitter_points_2019_11_d16_sentiment'
 
-input_tree= paste( str0,  file_tree , '.csv', sep="") # 字符串连接
+input_tree= paste( str0, path01, file_tree , '.csv', sep="") # 字符串连接
 tree = read.csv(input_tree, header=FALSE, sep=',',blank.lines.skip=FALSE, encoding="UTF-8", strip.white = FALSE)
 
-input_sentiment= paste( str0,  file_sentiment , '.csv', sep="") # 字符串连接
+input_sentiment= paste( str0, path01, file_sentiment , '.csv', sep="") # 字符串连接
 sentiment = read.csv(input_sentiment, header=FALSE, sep=',',blank.lines.skip=FALSE, encoding="UTF-8", strip.white = FALSE)
 
 
@@ -78,14 +79,14 @@ ggplot(data, mapping=aes(x= tree ,y=sentiment))+
     formula = formula(y ~ x),  # 
     aes(label = paste(..eq.label.., sep = "~~~")),
     parse = TRUE,
-    label.x = 0.96, label.y = 0.55, #设置位置
+    label.x = 0.96, label.y = 0.65, #设置位置
     size=5)+
   stat_cor(method='spearman',#使用斯皮尔曼等级相关系数
-           label.x = 0.45, label.y = 0.45, #相关系数和P值位置，不设置也行
+           label.x = 0.45, label.y = 0.52, #相关系数和P值位置，不设置也行
            label.sep = "\n",#P值和相关性系数换行
            size=5)+
-  labs(title='Tree coverage vs Sentiment')+ #主标题
-  xlab("Tree coverage") +   # X轴标签
+  labs(title='Relationship between \n UTC coverage and sentiment')+ #主标题
+  xlab("UTC coverage") +   # X轴标签
   ylab("Sentiment")+ # Y轴标签
   #theme_classic()+
   theme(plot.title = element_text(size=15,hjust = 0.5), #设置主标题大小为20，位置居中
@@ -95,7 +96,7 @@ ggplot(data, mapping=aes(x= tree ,y=sentiment))+
         legend.title = element_text(size = 15), # 设置图例标题文字的大小
         panel.border = element_rect(color = "black", fill = NA, size = 1), # 添加图形边框
         panel.background = element_rect(fill = "white"), # 设置背景为白色)
-        legend.position = c(0.85, 0.2))+
+        legend.position = c(0.85, 0.23))+
         scale_x_continuous(breaks = seq(0, 0.6, by = 0.1))-> treesentiment
 
 print(treesentiment)
@@ -122,15 +123,19 @@ share <- ggplot(data2) +
   geom_line(aes(x = ID, y = tree01_02, color = "tree(0.1~0.2)"), linewidth = 1.5) + # 添加另一条曲线
   geom_line(aes(x = ID, y = tree02_03, color = "tree(0.2~0.3)"), linewidth = 1.5) + # 添加另一条曲线
   geom_line(aes(x = ID, y = tree03_10, color = "tree(>0.3)"), linewidth = 1.5) + # 添加另一条曲线
-  ggtitle("Sentiment distribution curves for different tree coverage") + 
-  xlab("Sentiment coefficients") + 
+  ggtitle("Sentiment cumulative curves \n of different UTC coverage") + 
+  xlab("Sentiment") + 
   ylab("Cumulative share of total population (×100%)") + 
   scale_color_manual(name = "Curves", 
                      values = c("tree(0~0.1)" = "#333333", 
                                 "tree(0.1~0.2)" = "#129333", 
                                 "tree(0.2~0.3)" = "#D38000", 
                                 "tree(>0.3)" = "#F90000"),
-                     breaks = c("tree(0~0.1)", "tree(0.1~0.2)", "tree(0.2~0.3)", "tree(>0.3)"))+ # 设置图例标签和颜色
+                     breaks = c("tree(0~0.1)", "tree(0.1~0.2)", "tree(0.2~0.3)", "tree(>0.3)"),  # 设置图例标签和颜色
+                     labels = c("UTC Coverage (0~0.1)",
+                       "UTC Coverage (0.1~0.2)",
+                       "UTC Coverage (0.2~0.3)",
+                       "UTC Coverage (>0.3)"))+
   theme_minimal() +  # 使用简洁的主题
   theme_classic() +  # 坐标轴
   theme(
@@ -246,7 +251,7 @@ Brazil2 <- Brazil %>%
 ggplot() +
   geom_sf(data = Brazil2, aes(fill=Regions))+ # 绘制底图
   scale_fill_manual(values = c("North Brazil" = "#FFFFFF","Northeast Brazil"="#EEEEEE", 
-                               "South Brazil"="#888888", "Sourtheast Brazil"="#CCCCCC", 
+                               "South Brazil"="#666666", "Sourtheast Brazil"="#CCCCCC", 
                                "Centralwest Brazil" = "#AAAAAA")) +  # 手动指定颜色映射
   ggtitle("Federative Republic of Brazil") +  # 标题
   theme_minimal() +  # 使用简洁的主题
@@ -357,34 +362,34 @@ p4<-ggplot()+background_image(lab2)+theme_void()
 
 aa <-  cowplot::plot_grid(map_Brazil,nrow = 1, ncol = 1, labels = c("a"),
                           label_size = 18, scale=1,label_x = 0.02, label_y = 1.0, rel_widths = c(1, 1))
-print(aa)
+#print(aa)
 
 # label_x = 0.1, label_y = 1.0: 设置标签的相对位置，这里表示标签位于图形的左上角。
 
-bb <-  cowplot::plot_grid(p1, p2,p3,p4,nrow = 1, ncol = 4, labels = c("b", "c", "d", "e"),
-                          label_size = 18, scale=1,label_x = 0.02, label_y = 1.12, rel_widths = c(1, 1))
+bb <-  cowplot::plot_grid(p1, p2, p3, p4,nrow = 1, ncol = 4, labels = c("b", "c", "d", "e"),
+                          label_size = 18, scale=1,label_x = 0.02, label_y = 1.15, rel_widths = c(1, 1))
 
-print(bb)
+#print(bb)
 
-cc <-  cowplot::plot_grid (treesentiment,share, nrow = 2, ncol = 1, labels = c("f","g"),
+cc <-  cowplot::plot_grid (treesentiment, share, nrow = 2, ncol = 1, labels = c("f","g"),
                           label_size = 18, scale=1,label_x = 0.1, label_y = 1.0, rel_widths = c(1, 1))
-print(cc)
+#print(cc)
 
 
 p1 <- cowplot::plot_grid(aa, bb, nrow = 2,ncol = 1, align = "h", rel_heights = c(3.5, 1), rel_widths = c(3.5, 1)) # rel_heights 参数图形高度设置
-print(p1)
+#print(p1)
 
 ggsave("D:/Sentiment_Brazil/R_codes/NewCodes/fig_Brazilmap_tree.pdf", plot = p1, width = 300, height = 300, units = "mm",dpi=300)
 
 # 假设 aa 是一个 ggplot 对象
 #aa_small <- aa + coord_fixed(ratio = 0.5)
 
-p2 <- cowplot::plot_grid(p1, cc, nrow = 1,ncol = 2, align = "h", rel_heights = c(2.0, 1), rel_widths = c(2.0, 1)) # rel_heights 参数图形高度设置
-print(p2)
+p2 <- cowplot::plot_grid(p1, cc, nrow = 1,ncol = 2, align = "h", rel_heights = c(2.0, 0.9), rel_widths = c(2.0, 1)) # rel_heights 参数图形高度设置
+#print(p2)
 
 
 ggsave("D:/Sentiment_Brazil/R_codes/NewCodes/fig_Brazilmap_tree_sentiment_gini_share.pdf", plot = p2, 
-       width = 500, height = 350, units = "mm",dpi=300)
+       width = 350, height = 260, units = "mm",dpi=300)
 
 
 #################################################################################################################################
